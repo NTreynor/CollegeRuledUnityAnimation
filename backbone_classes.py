@@ -136,12 +136,10 @@ class Character:
 
 
 class Environment:
-    def __init__(self, name, quality, spacesuit_needed, has_airlock):
+    def __init__(self, name, quality):
         self.name = name
         self.quality = quality
         self.distances = {}
-        self.spacesuit_needed = spacesuit_needed
-        self.has_airlock = has_airlock
 
     def setDistance(self, other_environment, distance_index):
         self.distances[other_environment] = distance_index

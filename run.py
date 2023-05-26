@@ -1,8 +1,5 @@
 from backbone_classes import *
-from events.events import *
-from events.law_events import *
-from events.love_events import *
-from events.health_events import *
+from events.oldEvents import *
 from path_finding import *
 import numpy as np
 import matplotlib.pyplot as plt
@@ -108,72 +105,6 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoints = None,
     return runStory(next_worldstate, possible_events, depth_limit - 1, waypoints, lookaheadDepth, dramaVals=dramaVals)
 
 def waypointTestEnvironment():
-    # Environment Initialization
-    wp_serenity = Environment("Serenity", 25, False, True)
-    wp_space = Environment("Space", -100, True, False)
-    wp_serenity.setDistance(wp_space, 0)
-    wp_space.setDistance(wp_serenity, 0)
-
-    # Character & Relationship Initialization
-    wp_jess = Character("Jess", health=6, happiness=8, location=wp_serenity, romantic_partner=False)
-    wp_mal = Character("Mal", health=6, happiness=7, location=wp_serenity, romantic_partner=False)
-    wp_inara = Character("Inara", health=7, happiness=5, location=wp_serenity, romantic_partner=False, murderer=False)
-
-    wp_jess.updateRelationship(wp_mal, 45)
-    wp_jess.updateRelationship(wp_inara, 0)
-    wp_mal.updateRelationship(wp_jess, 45)
-    wp_mal.updateRelationship(wp_inara, 35)
-    wp_inara.updateRelationship(wp_jess, -5)
-    wp_inara.updateRelationship(wp_mal, 35)
-
-    wp_environments = [wp_serenity, wp_space]
-    wp_chars = [wp_jess, wp_mal, wp_inara]
-    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments)
-
-    wp_init_worldstate = copy.deepcopy(wp_curr_worldstate) # Save FIRST worldstate
-
-    # Update characters for second waypoint
-
-    wp_jess.health = None
-    wp_mal.health = None
-    wp_inara.health = None
-    wp_jess.happiness = None
-    wp_mal.happiness = None
-    wp_inara.happiness = None
-    wp_jess.updateRelationship(wp_mal, 30)
-    wp_mal.updateRelationship(wp_jess, 40)
-    wp_jess.romantic_partner = wp_mal
-    wp_mal.romantic_partner = wp_jess
-    wp_chars = [wp_jess, wp_mal, wp_inara]
-
-    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 10)
-    wp_2_worldstate = copy.deepcopy(wp_curr_worldstate) # Save second waypoint
-    wp_2_worldstate.drama_score = 15
-
-    #wp_jess = Character("Jess", health=None, happiness=None, location=wp_serenity, romantic_partner=None)
-    wp_mal.updateRelationship(wp_jess, -30)
-    wp_inara.relationships.pop(wp_jess)
-    wp_mal.updateRelationship(wp_inara, 30)
-    wp_inara.updateRelationship(wp_mal, 45)
-    wp_mal.romantic_partner = wp_inara
-    wp_inara.romantic_partner = wp_mal
-    wp_inara.fugitive = True
-    wp_inara.murderer = True
-    wp_mal.has_job = True
-    wp_chars = [wp_mal, wp_inara]
-
-
-    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 40)
-    wp_3_worldstate = copy.deepcopy(wp_curr_worldstate) # Save third waypoint
-    wp_3_worldstate.drama_score = 100
-
-    waypoints = [wp_2_worldstate, wp_3_worldstate]
-    starting_point = wp_init_worldstate
-
-    return [starting_point, waypoints]
-
-
-def waypointTestEnvironmentAlt():
 
     # Drama curve Initialization
     params = [[2.6, 6], [2, 13]]
@@ -181,18 +112,18 @@ def waypointTestEnvironmentAlt():
 
 
     # Environment Initialization
-    wp_serenity = Environment("Serenity", 25, False, True)
-    wp_space = Environment("Space", -100, True, False)
-    wp_serenity.setDistance(wp_space, 0)
-    wp_space.setDistance(wp_serenity, 0)
+    wp_restaurant = Environment("Restaurant", 25)
+    wp_outdoors = Environment("Street", -5)
+    wp_restaurant.setDistance(wp_outdoors, 0)
+    wp_outdoors.setDistance(wp_restaurant, 0)
 
     # Character & Relationship Initialization
-    wp_jess = Character("Jess", health=7, happiness=8, location=wp_serenity, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, exploited=False)
-    wp_mal = Character("Mal", health=7, happiness=5, location=wp_serenity, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, exploited=False)
-    wp_inara = Character("Inara", health=5, happiness=5, location=wp_serenity, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, exploited=False)
+    wp_jess = Character("Jess", health=10, happiness=8, location=wp_outdoors, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, exploited=False)
+    wp_mal = Character("Mal", health=10, happiness=5, location=wp_outdoors, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, exploited=False)
+    wp_waiter = Character("Waiter", health=10, happiness=4, location=wp_restaurant, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, exploited=False)
 
-    wp_environments = [wp_serenity, wp_space]
-    wp_chars = [wp_jess, wp_mal, wp_inara]
+    wp_environments = [wp_restaurant, wp_outdoors]
+    wp_chars = [wp_jess, wp_mal, wp_waiter]
     wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, None, testCurve)
 
     wp_init_worldstate = copy.deepcopy(wp_curr_worldstate) # Save FIRST worldstate
@@ -222,40 +153,13 @@ def waypointTestEnvironmentAlt():
 
 if __name__ == "__main__":
 
-    """
-    __init__(self, numDistributions, parameters, range):
-    params = [[1.8, 9], [1, 15]]
-    testCurve = DramaCurve(2, params, 20, 200)
-    dramaTargets = testCurve.getDramaTargets()
-    print(dramaTargets)
-    """
-
-    possibleEvents = [FallInLove(), AskOnDate(),  HitBySpaceCar(), GetMiningJob(),
-                        GetSpaceShuttleJob(), GoToSpaceJail(), SoloJailbreak(), CoffeeSpill(),
-                        HospitalVisit(), Cheat(), Steal(), Irritate(), Befriend(), LoseJob(),
-                        AssistedJailBreak(), SabotagedJailBreak(), DoNothing(), MoneyProblems(), GetRejectedFromJob()]
-
-
-    # First demo story
-    initWorldState, waypoints = waypointTestEnvironment()
-    runStory(initWorldState, possibleEvents, 15, waypoints, lookaheadDepth=2)
-
-
-    print("")
-    print("Second Story:")
-    print("")
-
-    # Second demo story
-    # Using drama curve system
-    """
-    initWorldState, waypoints = waypointTestEnvironmentAlt()
-    runStory(initWorldState, possibleEvents, 15, waypoints, lookaheadDepth=2)
-    """
+    possibleEvents = [GetMiningJob(), GetSpaceShuttleJob(), CoffeeSpill(), LoseJob(), DoNothing(), MoneyProblems(),
+                      GetRejectedFromJob()]
 
     numStories = 1
     dramaValList = []
     for z in range(numStories):
-        initWorldState, waypoints = waypointTestEnvironmentAlt()
+        initWorldState, waypoints = waypointTestEnvironment()
         dramaValuesInstance = runStory(initWorldState, possibleEvents, 15, waypoints, lookaheadDepth=2)
         dramaValList.append(dramaValuesInstance)
 
@@ -317,7 +221,6 @@ if __name__ == "__main__":
     plt.plot(xVals, currDramaMax, color="blue") #upper bound
     plt.plot(xVals, currDramaMin, color="blue") #Lower bound
     plt.plot(xVals, dramaVals[1], color="green") #Target
-    #plt.show()
 
 
 

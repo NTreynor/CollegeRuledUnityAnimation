@@ -1,8 +1,5 @@
 from backbone_classes import *
-from events.events import *
-from events.law_events import *
-from events.love_events import *
-from events.health_events import *
+from events.oldEvents import *
 import random
 
 from run import getRunableEvents
