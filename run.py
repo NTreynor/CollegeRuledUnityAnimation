@@ -158,7 +158,7 @@ if __name__ == "__main__":
     #possibleEvents = [GetMiningJob(), GetSpaceShuttleJob(), CoffeeSpill(), LoseJob(), DoNothing(), MoneyProblems(),
     #                  GetRejectedFromJob(), ArrivesInRestaurant()]
 
-    possibleEvents = [CoffeeSpill(), DoNothing(), ArrivesInRestaurant()]
+    possibleEvents = [CoffeeSpill(), DoNothing(), ArrivesInRestaurant(), LeavesRestaurant()]
 
     numStories = 1
     dramaValList = []
