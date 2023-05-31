@@ -129,8 +129,8 @@ class Character:
 
     def sameLoc(self, other_character):
         # TODO: if we want location implementation, change this
-        # return self.location == other_character.location
-        return True
+        return self.location == other_character.location
+        #return True
 
     def __str__(self):
         return "Character name is %s. Relationship matrix is: %s." % (self.name, str(self.relationships))

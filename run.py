@@ -131,9 +131,9 @@ def waypointTestEnvironment():
 
     # Update characters for second waypoint
 
-    wp_jess2 = Character("Jess", health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
-    wp_mal2 = Character("Mal", health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
-    wp_mal2 = Character("Waiter", health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
+    wp_jess2 = Character("Jess", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
+    wp_mal2 = Character("Mal", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
+    wp_mal2 = Character("Waiter", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
     wp_jess2.murderer = True
     wp_mal2.stole = True
     wp_jess2.updateRelationship(wp_mal2, 40)
@@ -158,7 +158,7 @@ if __name__ == "__main__":
     #possibleEvents = [GetMiningJob(), GetSpaceShuttleJob(), CoffeeSpill(), LoseJob(), DoNothing(), MoneyProblems(),
     #                  GetRejectedFromJob(), ArrivesInRestaurant()]
 
-    possibleEvents = [CoffeeSpill(), DoNothing(), ArrivesInRestaurant(), LeavesRestaurant()]
+    possibleEvents = [CoffeeSpill(), DoNothing(), ArrivesInRestaurant(), LeavesRestaurant(), AquireBeverage(), ThrowDrink()]
 
     numStories = 1
     dramaValList = []
