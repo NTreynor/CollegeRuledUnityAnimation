@@ -29,9 +29,29 @@ class ArrivesInRestaurant(PlotFragment):
         valid_characters = []
         environments = []
         for character in worldstate.characters:
-                if character.locationoc(character2):
-                    valid_characters.append([character, character2])
-                    environments.append([])
+                if character.location != (worldstate.getEnvironmentByName("Restaurant")):
+                    valid_characters.append([character])
+                    environments.append([worldstate.getEnvironmentByName("Restaurant")])
+
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        if print_event:
+            print(
+                "{} arrives in the restaurant".format(
+                    characters[0].name))
+
+        char_index = worldstate.characters.index(characters[0])
+        char = reachable_worldstate.characters[char_index] # Grab the character in the reachable worldstate.
+        env_index = worldstate.environments.index(environment[0])
+        newEnv = reachable_worldstate.environments[env_index] # Grab the environment
+        char.location = newEnv # Update character in the new environment
+        reachable_worldstate.drama_score += self.drama
+        return self.updateEventHistory(reachable_worldstate, characters, environment) # Pass back new worldstate.
 
 class CoffeeSpill(PlotFragment):
     def __init__(self):
@@ -45,8 +65,9 @@ class CoffeeSpill(PlotFragment):
         for character in worldstate.characters:
             for character2 in character.relationships:
                 if character.sameLoc(character2):
-                    valid_characters.append([character, character2])
-                    environments.append([])
+                    if character.has_beverage:
+                        valid_characters.append([character, character2])
+                        environments.append([])
 
         if valid_characters:
             return True, valid_characters, environments
@@ -56,7 +77,7 @@ class CoffeeSpill(PlotFragment):
     def doEvent(self, worldstate, characters, environment, print_event=True):
         reachable_worldstate = copy.deepcopy(worldstate)
         if print_event:
-            print("{} is walking along with a fresh cup of hydrozine, and loses their footing right as they would pass by {}, spilling their drink all over them! \"Oh goodness, sorry about that!\" says {}.".format(characters[0].name, characters[1].name, characters[0].name))
+            print("{} spills their drink all over {}! \"Oh goodness, sorry about that!\" says {}.".format(characters[0].name, characters[1].name, characters[0].name))
         char_index = worldstate.characters.index(characters[0])
         char_two_index = worldstate.characters.index(characters[1])
         char = reachable_worldstate.characters[char_index]

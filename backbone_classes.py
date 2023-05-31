@@ -2,13 +2,14 @@ import copy
 import math
 
 class Character:
-    def __init__(self, name, health=None, happiness=None, has_job=None, exploited=None, \
+    def __init__(self, name, health=None, happiness=None, has_job=None, has_beverage=None, exploited=None, \
         murderer=None, stole=None, in_jail=None, fugitive=None, relationships = None, \
             romantic_partner=None, location=None):
         self.name = name  # string
         self.health = health # scale of 0 to 10
         self.happiness = happiness # scale of 0 to 10
         self.has_job = has_job  # boolean
+        self.has_beverage = has_beverage  # boolean
         self.exploited = exploited  # boolean
         self.murderer = murderer  # boolean
         self.stole = stole  # boolean
@@ -166,6 +167,11 @@ class WorldState:
                 if other_character.romantic_partner == character:
                     other_character.romantic_partner = False
         self.characters.remove(character)
+
+    def getEnvironmentByName(self, targetName):
+        for env in self.environments:
+            if env.name == targetName:
+                return env
 
     def getDramaCurve(self):
         return self.drama_curve
