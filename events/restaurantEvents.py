@@ -92,7 +92,7 @@ class AquireBeverage(PlotFragment):
         self.drama = 3
 
     def checkPreconditions(self, worldstate):
-        if not self.withinRepeatLimit(worldstate, 2):
+        if not self.withinRepeatLimit(worldstate, 6):
             return False, None, []
         valid_characters = []
         environments = []
@@ -202,6 +202,7 @@ class ThrowDrink(PlotFragment):
         char.updateRelationship(char_two, -5)
         char_two.updateRelationship(char, -35)
         reachable_worldstate.drama_score += self.drama
+        char.has_beverage = False
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 

@@ -122,7 +122,7 @@ def waypointTestEnvironment():
     wp_jess = Character("Jess", health=10, happiness=8, location=wp_outdoors, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, has_beverage=False, exploited=False)
     wp_mal = Character("Mal", health=10, happiness=5, location=wp_outdoors, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, has_beverage=False, exploited=False)
     wp_waiter = Character("Waiter", health=10, happiness=4, location=wp_restaurant, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=True, has_beverage=False, exploited=False)
-
+    wp_jess.updateRelationship(wp_mal, -15)
     wp_environments = [wp_restaurant, wp_outdoors]
     wp_chars = [wp_jess, wp_mal, wp_waiter]
     wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, None, testCurve)
@@ -137,7 +137,7 @@ def waypointTestEnvironment():
     wp_jess2.murderer = True
     wp_mal2.stole = True
     wp_jess2.updateRelationship(wp_mal2, 40)
-    wp_mal2.updateRelationship(wp_jess2, 40)
+    wp_mal2.updateRelationship(wp_jess2, 25)
     wp_mal2.romantic_partner = wp_jess2
     wp_jess2.romantic_partner = wp_mal2
 
