@@ -21,7 +21,7 @@ Character A throws drink in Character B’s face
 
 class ArrivesInRestaurant(PlotFragment):
     def __init__(self):
-        self.drama = 3
+        self.drama = 5
 
     def checkPreconditions(self, worldstate):
         if not self.withinRepeatLimit(worldstate, 4):
@@ -55,7 +55,7 @@ class ArrivesInRestaurant(PlotFragment):
 
 class LeavesRestaurant(PlotFragment):
     def __init__(self):
-        self.drama = 3
+        self.drama = 17
 
     def checkPreconditions(self, worldstate):
         if not self.withinRepeatLimit(worldstate, 1):
@@ -64,8 +64,9 @@ class LeavesRestaurant(PlotFragment):
         environments = []
         for character in worldstate.characters:
             if character.location != (worldstate.getEnvironmentByName("Street")):
-                valid_characters.append([character])
-                environments.append([worldstate.getEnvironmentByName("Street")])
+                if character.name != "Waiter":
+                    valid_characters.append([character])
+                    environments.append([worldstate.getEnvironmentByName("Street")])
 
         if valid_characters:
             return True, valid_characters, environments
@@ -89,7 +90,7 @@ class LeavesRestaurant(PlotFragment):
 
 class AquireBeverage(PlotFragment):
     def __init__(self):
-        self.drama = 3
+        self.drama = 4
 
     def checkPreconditions(self, worldstate):
         if not self.withinRepeatLimit(worldstate, 6):
@@ -125,7 +126,7 @@ class AquireBeverage(PlotFragment):
 
 class CoffeeSpill(PlotFragment):
     def __init__(self):
-        self.drama = 3
+        self.drama = 12
 
     def checkPreconditions(self, worldstate):
         if not self.withinRepeatLimit(worldstate, 2):
@@ -166,7 +167,7 @@ class CoffeeSpill(PlotFragment):
 
 class ThrowDrink(PlotFragment):
     def __init__(self):
-        self.drama = 12
+        self.drama = 18
 
     def checkPreconditions(self, worldstate):
         if not self.withinRepeatLimit(worldstate, 2):
@@ -200,9 +201,128 @@ class ThrowDrink(PlotFragment):
         char = reachable_worldstate.characters[char_index]
         char_two = reachable_worldstate.characters[char_two_index]
         char.updateRelationship(char_two, -5)
-        char_two.updateRelationship(char, -35)
+        char_two.updateRelationship(char, -55)
         reachable_worldstate.drama_score += self.drama
         char.has_beverage = False
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+
+class Befriend(PlotFragment):
+    def __init__(self):
+        self.drama = 3
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+        if not self.withinRepeatLimit(worldstate, 3):
+            return False, None, environments
+        for character in worldstate.characters:
+            for character2 in worldstate.characters:
+                if character != character2:
+                    if character.sameLoc(character2):
+                        character.updateRelationship(character2, 0)  # if no relationship, add to relationship table
+                        if (character.relationships[character2] >= 0):
+                            if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 3):
+                                if self.withinInstanceLimit(worldstate, [character, character2], [], 2):
+                                    valid_characters.append([character, character2])
+                                    environments.append([])
+
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        reachable_worldstate.index += 1
+        if print_event:
+            print("{} approaches {} and strikes up a conversation. Good conversation ensues".format(characters[0].name, characters[1].name))
+        char_one_index = worldstate.characters.index(characters[0])
+        char_two_index = worldstate.characters.index(characters[1])
+        char_one = reachable_worldstate.characters[char_one_index]
+        char_two = reachable_worldstate.characters[char_two_index]
+        char_one.updateRelationship(char_two, 15)
+        char_two.updateRelationship(char_one, 15)
+        reachable_worldstate.drama_score += self.drama
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+class HitOnAccepted(PlotFragment):
+    def __init__(self):
+        self.drama = 6
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+        if not self.withinRepeatLimit(worldstate, 3):
+            return False, None, environments
+        for character in worldstate.characters:
+            for character2 in worldstate.characters:
+                if character != character2:
+                    if character.sameLoc(character2):
+                        character.updateRelationship(character2, 0)  # if no relationship, add to relationship table
+                        if (character.relationships[character2] >= 25):
+                            if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 3):
+                                if self.withinInstanceLimit(worldstate, [character, character2], [], 2):
+                                    valid_characters.append([character, character2])
+                                    environments.append([])
+
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        reachable_worldstate.index += 1
+        if print_event:
+            print("{} flirts with {}, and {} blushes.".format(characters[0].name, characters[1].name, characters[1].name))
+        char_one_index = worldstate.characters.index(characters[0])
+        char_two_index = worldstate.characters.index(characters[1])
+        char_one = reachable_worldstate.characters[char_one_index]
+        char_two = reachable_worldstate.characters[char_two_index]
+        char_one.updateRelationship(char_two, 5)
+        char_two.updateRelationship(char_one, 20)
+        reachable_worldstate.drama_score += self.drama
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+class HitOnRejected(PlotFragment):
+    def __init__(self):
+        self.drama = 12
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+        if not self.withinRepeatLimit(worldstate, 3):
+            return False, None, environments
+        for character in worldstate.characters:
+            for character2 in worldstate.characters:
+                if character != character2:
+                    if character.sameLoc(character2):
+                        character.updateRelationship(character2, 0)  # if no relationship, add to relationship table
+                        if (character.relationships[character2] >= 25):
+                            if (character2.relationships[character] <= 5):
+                                if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 3):
+                                    if self.withinInstanceLimit(worldstate, [character, character2], [], 2):
+                                        valid_characters.append([character, character2])
+                                        environments.append([])
+
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        reachable_worldstate.index += 1
+        if print_event:
+            print("{} slings a pickup line at {}, and {} is not amused. They glare in response".format(characters[0].name, characters[1].name, characters[1].name))
+        char_one_index = worldstate.characters.index(characters[0])
+        char_two_index = worldstate.characters.index(characters[1])
+        char_one = reachable_worldstate.characters[char_one_index]
+        char_two = reachable_worldstate.characters[char_two_index]
+        char_one.updateRelationship(char_two, -15)
+        char_two.updateRelationship(char_one, -15)
+        reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 

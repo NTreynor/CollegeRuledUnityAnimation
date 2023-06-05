@@ -158,13 +158,13 @@ if __name__ == "__main__":
     #possibleEvents = [GetMiningJob(), GetSpaceShuttleJob(), CoffeeSpill(), LoseJob(), DoNothing(), MoneyProblems(),
     #                  GetRejectedFromJob(), ArrivesInRestaurant()]
 
-    possibleEvents = [CoffeeSpill(), DoNothing(), ArrivesInRestaurant(), LeavesRestaurant(), AquireBeverage(), ThrowDrink()]
+    possibleEvents = [CoffeeSpill(), DoNothing(), ArrivesInRestaurant(), LeavesRestaurant(), AquireBeverage(), ThrowDrink(), Befriend(), HitOnAccepted(), HitOnRejected()]
 
     numStories = 1
     dramaValList = []
     for z in range(numStories):
         initWorldState, waypoints = waypointTestEnvironment()
-        dramaValuesInstance = runStory(initWorldState, possibleEvents, 15, waypoints, lookaheadDepth=1)
+        dramaValuesInstance = runStory(initWorldState, possibleEvents, 15, waypoints, lookaheadDepth=3)
         dramaValList.append(dramaValuesInstance)
 
     dramaVals = dramaValList[0]
