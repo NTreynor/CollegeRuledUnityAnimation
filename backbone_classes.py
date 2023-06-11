@@ -251,6 +251,9 @@ class PlotFragment:
         bool = not ((type(self), charStr, envStr) in worldstate.event_history[-1 * num_recent_events:])
         return bool
 
+    def appendAnimationCommand(self, worldstate, characters, environment):
+        return "not implemented"
+
 class DramaCurve:
     def __init__(self, numDistributions, parameters, xrange, desiredPeakDrama):
         """

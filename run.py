@@ -179,7 +179,7 @@ def waypointTestEnvironmentDramatic():
 
     wp_jess2 = Character("Jess", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
     wp_mal2 = Character("Mal", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
-    wp_mal2 = Character("Waiter", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
+    wp_waiter2= Character("Waiter", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
 
     wp_jess2.updateRelationship(wp_mal2, -40)
     wp_mal2.updateRelationship(wp_jess2, -25)
@@ -206,9 +206,12 @@ if __name__ == "__main__":
     numStories = 1
     dramaValList = []
     for z in range(numStories):
+        f = open("testStory.txt", "w")
         initWorldState, waypoints = waypointTestEnvironment()
         dramaValuesInstance = runStory(initWorldState, possibleEvents, 15, waypoints, lookaheadDepth=3)
         dramaValList.append(dramaValuesInstance)
+        f.close()
+
 
     dramaVals = dramaValList[0]
     lenOfGraph = len(dramaVals[1])

@@ -17,6 +17,21 @@ Character A orders food.
 Host delivers food to the table. 
 Host slips and throws food on Character B
 Character A throws drink in Character B’s face
+
+Jessica, Walk_In
+Jessica, Walk_Out
+Jessica, Approach_Dylan
+Jessica, Chat_Dylan
+Jessica, React_Positive
+Jessica, React_Negative
+Jessica, Throw_Drink
+Dylan, Walk_In
+Dylan, Walk_Out
+Dylan, Approach_Jessica
+Dylan, Chat_Jessica
+Dylan, React_Positive
+Dylan, React_Negative
+Dylan, Throw_Drink
 """
 
 class ArrivesInRestaurant(PlotFragment):
@@ -44,6 +59,7 @@ class ArrivesInRestaurant(PlotFragment):
             print(
                 "{} arrives in the restaurant".format(
                     characters[0].name))
+            self.appendAnimationCommand(worldstate, characters, environment)
 
         char_index = worldstate.characters.index(characters[0])
         char = reachable_worldstate.characters[char_index] # Grab the character in the reachable worldstate.
@@ -52,6 +68,12 @@ class ArrivesInRestaurant(PlotFragment):
         char.location = newEnv # Update character in the new environment
         reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment) # Pass back new worldstate.
+
+    def appendAnimationCommand(self, worldstate, characters, environment):
+        f = open("testStory.txt", "a")
+        character = characters[0].name
+        f.write(character + ", Walk_In\n")
+        return
 
 class LeavesRestaurant(PlotFragment):
     def __init__(self):
@@ -79,6 +101,7 @@ class LeavesRestaurant(PlotFragment):
             print(
                 "{} leaves the restaurant".format(
                     characters[0].name))
+            self.appendAnimationCommand(worldstate, characters, environment)
 
         char_index = worldstate.characters.index(characters[0])
         char = reachable_worldstate.characters[char_index] # Grab the character in the reachable worldstate.
@@ -87,6 +110,12 @@ class LeavesRestaurant(PlotFragment):
         char.location = newEnv # Update character in the new environment
         reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment) # Pass back new worldstate.
+
+    def appendAnimationCommand(self, worldstate, characters, environment):
+        f = open("testStory.txt", "a")
+        character = characters[0].name
+        f.write(character + ", Walk_Out\n")
+        return
 
 class AquireBeverage(PlotFragment):
     def __init__(self):
@@ -114,6 +143,7 @@ class AquireBeverage(PlotFragment):
             print(
                 "{} grabs a drink from the table".format(
                     characters[0].name))
+            self.appendAnimationCommand(worldstate, characters, environment)
 
         char_index = worldstate.characters.index(characters[0])
         char = reachable_worldstate.characters[char_index] # Grab the character in the reachable worldstate.
@@ -122,6 +152,13 @@ class AquireBeverage(PlotFragment):
         char.has_beverage = True
         reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment) # Pass back new worldstate.
+
+    def appendAnimationCommand(self, worldstate, characters, environment):
+        f = open("testStory.txt", "a")
+        character = characters[0].name
+        # f.write(character + ", Grab_Drink\n")
+        # Not currently implemented
+        return
 
 
 class CoffeeSpill(PlotFragment):
@@ -155,6 +192,7 @@ class CoffeeSpill(PlotFragment):
         reachable_worldstate = copy.deepcopy(worldstate)
         if print_event:
             print("{} is walking along with a fresh cup of coffee, and loses their footing right as they would pass by {}, spilling their drink all over them! \"Oh goodness, sorry about that!\" says {}.".format(characters[0].name, characters[1].name, characters[0].name))
+            self.appendAnimationCommand(worldstate, characters, environment)
         char_index = worldstate.characters.index(characters[0])
         char_two_index = worldstate.characters.index(characters[1])
         char = reachable_worldstate.characters[char_index]
@@ -164,6 +202,12 @@ class CoffeeSpill(PlotFragment):
         char.has_beverage = False
         reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+    def appendAnimationCommand(self, worldstate, characters, environment):
+        f = open("testStory.txt", "a")
+        character = characters[0].name
+        f.write(character + ", Spill_Drink\n")
+        return
 
 class ThrowDrink(PlotFragment):
     def __init__(self):
@@ -196,6 +240,7 @@ class ThrowDrink(PlotFragment):
         reachable_worldstate = copy.deepcopy(worldstate)
         if print_event:
             print("{} intentionally dumps their drink all over {}! \"Get stuffed, twerp!\" says {}.".format(characters[0].name, characters[1].name, characters[0].name))
+            self.appendAnimationCommand(worldstate, characters, environment)
         char_index = worldstate.characters.index(characters[0])
         char_two_index = worldstate.characters.index(characters[1])
         char = reachable_worldstate.characters[char_index]
@@ -206,6 +251,14 @@ class ThrowDrink(PlotFragment):
         char.has_beverage = False
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
+    def appendAnimationCommand(self, worldstate, characters, environment):
+        f = open("testStory.txt", "a")
+        character = characters[0].name
+        character2 = characters[1].name
+        f.write(character + ", Approach_" + character2 + "\n")
+        f.write(character + ", Throw_Drink\n")
+        f.write(character2 + ", React_negative\n")
+        return
 
 class Befriend(PlotFragment):
     def __init__(self):
@@ -237,6 +290,7 @@ class Befriend(PlotFragment):
         reachable_worldstate.index += 1
         if print_event:
             print("{} approaches {} and strikes up a conversation. Good conversation ensues".format(characters[0].name, characters[1].name))
+            self.appendAnimationCommand(worldstate, characters, environment)
         char_one_index = worldstate.characters.index(characters[0])
         char_two_index = worldstate.characters.index(characters[1])
         char_one = reachable_worldstate.characters[char_one_index]
@@ -245,6 +299,14 @@ class Befriend(PlotFragment):
         char_two.updateRelationship(char_one, 15)
         reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+    def appendAnimationCommand(self, worldstate, characters, environment):
+        f = open("testStory.txt", "a")
+        character = characters[0].name
+        character2 = characters[1].name
+        f.write(character + ", Approach_" + character2 + "\n")
+        f.write(character + ", Chat_" + character2 + "\n")
+        return
 
 class HitOnAccepted(PlotFragment):
     def __init__(self):
@@ -276,6 +338,7 @@ class HitOnAccepted(PlotFragment):
         reachable_worldstate.index += 1
         if print_event:
             print("{} flirts with {}, and {} blushes.".format(characters[0].name, characters[1].name, characters[1].name))
+            self.appendAnimationCommand(worldstate, characters, environment)
         char_one_index = worldstate.characters.index(characters[0])
         char_two_index = worldstate.characters.index(characters[1])
         char_one = reachable_worldstate.characters[char_one_index]
@@ -284,6 +347,14 @@ class HitOnAccepted(PlotFragment):
         char_two.updateRelationship(char_one, 20)
         reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+    def appendAnimationCommand(self, worldstate, characters, environment):
+        f = open("testStory.txt", "a")
+        character = characters[0].name
+        character2 = characters[1].name
+        f.write(character + ", Chat_" + character2 +"\n")
+        f.write(character2 + ", React_Positive\n")
+        return
 
 class HitOnRejected(PlotFragment):
     def __init__(self):
@@ -316,6 +387,7 @@ class HitOnRejected(PlotFragment):
         reachable_worldstate.index += 1
         if print_event:
             print("{} slings a pickup line at {}, and {} is not amused. They glare in response".format(characters[0].name, characters[1].name, characters[1].name))
+            self.appendAnimationCommand(worldstate, characters, environment)
         char_one_index = worldstate.characters.index(characters[0])
         char_two_index = worldstate.characters.index(characters[1])
         char_one = reachable_worldstate.characters[char_one_index]
@@ -324,6 +396,14 @@ class HitOnRejected(PlotFragment):
         char_two.updateRelationship(char_one, -15)
         reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+    def appendAnimationCommand(self, worldstate, characters, environment):
+        f = open("testStory.txt", "a")
+        character = characters[0].name
+        character2 = characters[1].name
+        f.write(character + ", Chat_" + character2 +"\n")
+        f.write(character2 + ", React_Negative\n")
+        return
 
 
 class DoNothing(PlotFragment):
@@ -340,4 +420,5 @@ class DoNothing(PlotFragment):
         reachable_worldstate = copy.deepcopy(worldstate)
         if print_event == True:
             print(".")
+        self.appendAnimationCommand(worldstate, characters, environment)
         return self.updateEventHistory(reachable_worldstate, characters, environment)
