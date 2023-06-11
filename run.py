@@ -165,8 +165,8 @@ def waypointTestEnvironmentSimple():
     wp_outdoors.setDistance(wp_restaurant, 0)
 
     # Character & Relationship Initialization
-    wp_jess = Character("Jess", health=10, happiness=8, location=wp_outdoors, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, has_beverage=False, exploited=False)
-    wp_mal = Character("Mal", health=10, happiness=5, location=wp_outdoors, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, has_beverage=False, exploited=False)
+    wp_jess = Character("Jessica", health=10, happiness=8, location=wp_outdoors, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, has_beverage=False, exploited=False)
+    wp_mal = Character("Dylan", health=10, happiness=5, location=wp_outdoors, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, has_beverage=False, exploited=False)
     wp_jess.updateRelationship(wp_mal, -15)
     wp_environments = [wp_restaurant, wp_outdoors]
     wp_chars = [wp_jess, wp_mal]
@@ -175,8 +175,8 @@ def waypointTestEnvironmentSimple():
 
     # Update characters for second waypoint
 
-    wp_jess2 = Character("Jess", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
-    wp_mal2 = Character("Mal", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
+    wp_jess2 = Character("Jessica", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
+    wp_mal2 = Character("Dylan", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
     wp_jess2.updateRelationship(wp_mal2, 40)
     wp_mal2.updateRelationship(wp_jess2, 25)
     wp_mal2.romantic_partner = wp_jess2
