@@ -1,0 +1,13 @@
+Mal, Walk_In
+Mal, Walk_Out
+Mal, Spill_Drink
+Mal, Approach_Jess
+Mal, Chat_Jess
+Mal, Walk_In
+Jess, Walk_In
+Mal, Approach_Jess
+Mal, Chat_Jess
+Jess, Approach_Mal
+Jess, Chat_Mal
+Mal, Chat_Jess
+Jess, React_Positive
