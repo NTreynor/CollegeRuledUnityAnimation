@@ -154,19 +154,3 @@ class LoseJob(PlotFragment):
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
-class DoNothing(PlotFragment):
-    # Purely exists to allow some flexibility in pacing.
-    def __init__(self):
-        self.drama = 0
-
-    def checkPreconditions(self, worldstate):
-        if self.withinRecentHistoryLimit(worldstate, [], [], 3):
-            return True, [[]], [[]]
-        return False, [[]], [[]]
-
-    def doEvent(self, worldstate, characters, environment, print_event=True):
-        reachable_worldstate = copy.deepcopy(worldstate)
-        if print_event == True:
-            print(".")
-        return self.updateEventHistory(reachable_worldstate, characters, environment)
-

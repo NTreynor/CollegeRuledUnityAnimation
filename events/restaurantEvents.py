@@ -36,10 +36,10 @@ Dylan, Throw_Drink
 
 class ArrivesInRestaurant(PlotFragment):
     def __init__(self):
-        self.drama = 5
+        self.drama = 3
 
     def checkPreconditions(self, worldstate):
-        if not self.withinRepeatLimit(worldstate, 4):
+        if not self.withinRepeatLimit(worldstate, 3):
             return False, None, []
         valid_characters = []
         environments = []
@@ -77,10 +77,10 @@ class ArrivesInRestaurant(PlotFragment):
 
 class LeavesRestaurant(PlotFragment):
     def __init__(self):
-        self.drama = 17
+        self.drama = -15
 
     def checkPreconditions(self, worldstate):
-        if not self.withinRepeatLimit(worldstate, 1):
+        if not self.withinRepeatLimit(worldstate, 4):
             return False, None, []
         valid_characters = []
         environments = []
@@ -119,10 +119,10 @@ class LeavesRestaurant(PlotFragment):
 
 class AquireBeverage(PlotFragment):
     def __init__(self):
-        self.drama = 4
+        self.drama = 3
 
     def checkPreconditions(self, worldstate):
-        if not self.withinRepeatLimit(worldstate, 6):
+        if not self.withinRepeatLimit(worldstate, 4):
             return False, None, []
         valid_characters = []
         environments = []
@@ -163,10 +163,10 @@ class AquireBeverage(PlotFragment):
 
 class CoffeeSpill(PlotFragment):
     def __init__(self):
-        self.drama = 12
+        self.drama = 15
 
     def checkPreconditions(self, worldstate):
-        if not self.withinRepeatLimit(worldstate, 2):
+        if not self.withinRepeatLimit(worldstate, 3):
             return False, None, []
         valid_characters = []
         environments = []
@@ -211,10 +211,10 @@ class CoffeeSpill(PlotFragment):
 
 class ThrowDrink(PlotFragment):
     def __init__(self):
-        self.drama = 18
+        self.drama = 20
 
     def checkPreconditions(self, worldstate):
-        if not self.withinRepeatLimit(worldstate, 2):
+        if not self.withinRepeatLimit(worldstate, 3):
             return False, None, []
         valid_characters = []
         environments = []
@@ -262,7 +262,7 @@ class ThrowDrink(PlotFragment):
 
 class Befriend(PlotFragment):
     def __init__(self):
-        self.drama = 3
+        self.drama = 6
 
     def checkPreconditions(self, worldstate):
         valid_characters = []
@@ -352,13 +352,14 @@ class HitOnAccepted(PlotFragment):
         f = open("testStory.txt", "a")
         character = characters[0].name
         character2 = characters[1].name
+        f.write(character + ", Approach_" + character2 + "\n")
         f.write(character + ", Chat_" + character2 +"\n")
         f.write(character2 + ", React_Positive\n")
         return
 
 class HitOnRejected(PlotFragment):
     def __init__(self):
-        self.drama = 12
+        self.drama = 11
 
     def checkPreconditions(self, worldstate):
         valid_characters = []
@@ -401,6 +402,7 @@ class HitOnRejected(PlotFragment):
         f = open("testStory.txt", "a")
         character = characters[0].name
         character2 = characters[1].name
+        f.write(character + ", Approach_" + character2 + "\n")
         f.write(character + ", Chat_" + character2 +"\n")
         f.write(character2 + ", React_Negative\n")
         return
@@ -418,7 +420,7 @@ class DoNothing(PlotFragment):
 
     def doEvent(self, worldstate, characters, environment, print_event=True):
         reachable_worldstate = copy.deepcopy(worldstate)
-        if print_event == True:
-            print(".")
+        #if print_event == True:
+        #    print(".")
         self.appendAnimationCommand(worldstate, characters, environment)
         return self.updateEventHistory(reachable_worldstate, characters, environment)

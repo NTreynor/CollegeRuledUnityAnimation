@@ -197,8 +197,8 @@ def waypointTestEnvironmentSimple():
 def waypointTestEnvironmentDramatic():
 
     # Drama curve Initialization
-    params = [[2.6, 6], [2, 13]]
-    testCurve = DramaCurve(2, params, 16, 100)
+    params = [[5.5, 8], [2.5, 13]]
+    testCurve = DramaCurve(2, params, 16, 70)
 
 
     # Environment Initialization
@@ -210,10 +210,12 @@ def waypointTestEnvironmentDramatic():
     # Character & Relationship Initialization
     wp_jess = Character("Jess", health=10, happiness=8, location=wp_outdoors, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, has_beverage=False, exploited=False)
     wp_mal = Character("Mal", health=10, happiness=5, location=wp_outdoors, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, has_beverage=False, exploited=False)
-    wp_waiter = Character("Waiter", health=10, happiness=4, location=wp_restaurant, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=True, has_beverage=False, exploited=False)
-    wp_jess.updateRelationship(wp_mal, -15)
+    #wp_waiter = Character("Waiter", health=10, happiness=4, location=wp_restaurant, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=True, has_beverage=False, exploited=False)
+    wp_jess.updateRelationship(wp_mal, -10)
+    wp_mal.updateRelationship(wp_jess, 35)
     wp_environments = [wp_restaurant, wp_outdoors]
-    wp_chars = [wp_jess, wp_mal, wp_waiter]
+    #wp_chars = [wp_jess, wp_mal, wp_waiter]
+    wp_chars = [wp_jess, wp_mal]
     wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, None, testCurve)
 
     wp_init_worldstate = copy.deepcopy(wp_curr_worldstate) # Save FIRST worldstate
@@ -222,7 +224,7 @@ def waypointTestEnvironmentDramatic():
 
     wp_jess2 = Character("Jess", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
     wp_mal2 = Character("Mal", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
-    wp_waiter2= Character("Waiter", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
+    #wp_waiter2= Character("Waiter", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
 
     wp_jess2.updateRelationship(wp_mal2, -40)
     wp_mal2.updateRelationship(wp_jess2, -25)
@@ -233,8 +235,29 @@ def waypointTestEnvironmentDramatic():
     wp_2_worldstate = copy.deepcopy(wp_curr_worldstate2) # Save second waypoint
     wp_2_worldstate.drama_score = 100
 
+    # ----------------
 
-    waypoints = [wp_2_worldstate]
+    # Update characters for third waypoint
+
+    wp_jess3 = Character("Jess", location=wp_restaurant, health=None, happiness=None, romantic_partner=None,
+                         murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None,
+                         exploited=None)
+    wp_mal3 = Character("Mal", location=wp_restaurant, health=None, happiness=None, romantic_partner=None,
+                        murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None,
+                        exploited=None)
+    # wp_waiter2= Character("Waiter", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
+
+    wp_jess3.updateRelationship(wp_mal3, 25)
+    wp_mal3.updateRelationship(wp_jess3, 25)
+
+    wp_chars3 = [wp_jess3, wp_mal3]
+
+    wp_curr_worldstate3 = WorldState(0, wp_chars3, wp_environments, 10, testCurve)
+    wp_3_worldstate = copy.deepcopy(wp_curr_worldstate3)  # Save second waypoint
+    wp_3_worldstate.drama_score = 100
+
+
+    waypoints = [wp_2_worldstate, wp_3_worldstate]
     starting_point = wp_init_worldstate
 
     return [starting_point, waypoints]
@@ -246,11 +269,12 @@ if __name__ == "__main__":
 
     possibleEvents = [CoffeeSpill(), DoNothing(), ArrivesInRestaurant(), LeavesRestaurant(), AquireBeverage(), ThrowDrink(), Befriend(), HitOnAccepted(), HitOnRejected()]
 
-    numStories = 1
+    numStories = 10
     dramaValList = []
     for z in range(numStories):
         f = open("testStory.txt", "w")
-        initWorldState, waypoints = waypointTestEnvironmentSimple()
+        #initWorldState, waypoints = waypointTestEnvironmentSimple()
+        initWorldState, waypoints = waypointTestEnvironmentDramatic()
         dramaValuesInstance = runStory(initWorldState, possibleEvents, 15, waypoints, lookaheadDepth=3)
         dramaValList.append(dramaValuesInstance)
         f.close()
@@ -258,6 +282,7 @@ if __name__ == "__main__":
 
     dramaVals = dramaValList[0]
     lenOfGraph = len(dramaVals[1])
+    #lenOfGraph = 15
 
     currDramaMean = [0] * lenOfGraph
     currDramaMin = [9999] * lenOfGraph
