@@ -271,8 +271,8 @@ if __name__ == "__main__":
     dramaValList = []
     for z in range(numStories):
         f = open("testStory.txt", "w")
-        initWorldState, waypoints = waypointTestEnvironmentSimple()
-        #initWorldState, waypoints = waypointTestEnvironmentDramatic()
+        #initWorldState, waypoints = waypointTestEnvironmentSimple()
+        initWorldState, waypoints = waypointTestEnvironmentDramatic()
         dramaValuesInstance = runStory(initWorldState, possibleEvents, 15, waypoints, lookaheadDepth=3)
         dramaValList.append(dramaValuesInstance)
         f.close()
