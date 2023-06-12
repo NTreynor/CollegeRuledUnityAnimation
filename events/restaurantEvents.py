@@ -276,9 +276,10 @@ class Befriend(PlotFragment):
                         character.updateRelationship(character2, 0)  # if no relationship, add to relationship table
                         if (character.relationships[character2] >= 0):
                             if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 3):
-                                if self.withinInstanceLimit(worldstate, [character, character2], [], 2):
-                                    valid_characters.append([character, character2])
-                                    environments.append([])
+                                if self.withinRecentHistoryLimit(worldstate, [character2, character], [], 2):
+                                    if self.withinInstanceLimit(worldstate, [character, character2], [], 2):
+                                        valid_characters.append([character, character2])
+                                        environments.append([])
 
         if valid_characters:
             return True, valid_characters, environments

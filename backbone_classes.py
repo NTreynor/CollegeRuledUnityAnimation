@@ -246,7 +246,7 @@ class PlotFragment:
             charStr += char.name
         envStr = ""
         for env in environment:
-            charStr += char.name
+            envStr += env.name
 
         bool = not ((type(self), charStr, envStr) in worldstate.event_history[-1 * num_recent_events:])
         return bool

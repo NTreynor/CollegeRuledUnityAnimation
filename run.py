@@ -177,10 +177,8 @@ def waypointTestEnvironmentSimple():
 
     wp_jess2 = Character("Jessica", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
     wp_mal2 = Character("Dylan", location=wp_restaurant, health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, has_beverage=None, exploited=None)
-    wp_jess2.updateRelationship(wp_mal2, 40)
-    wp_mal2.updateRelationship(wp_jess2, 25)
-    wp_mal2.romantic_partner = wp_jess2
-    wp_jess2.romantic_partner = wp_mal2
+    wp_jess2.updateRelationship(wp_mal2, 70)
+    wp_mal2.updateRelationship(wp_jess2, 55)
 
     wp_chars2 = [wp_jess2, wp_mal2]
 
@@ -273,8 +271,8 @@ if __name__ == "__main__":
     dramaValList = []
     for z in range(numStories):
         f = open("testStory.txt", "w")
-        #initWorldState, waypoints = waypointTestEnvironmentSimple()
-        initWorldState, waypoints = waypointTestEnvironmentDramatic()
+        initWorldState, waypoints = waypointTestEnvironmentSimple()
+        #initWorldState, waypoints = waypointTestEnvironmentDramatic()
         dramaValuesInstance = runStory(initWorldState, possibleEvents, 15, waypoints, lookaheadDepth=3)
         dramaValList.append(dramaValuesInstance)
         f.close()
