@@ -251,6 +251,15 @@ class PlotFragment:
         bool = not ((type(self), charStr, envStr) in worldstate.event_history[-1 * num_recent_events:])
         return bool
 
+    # For causality:
+    # This is likely to be costly if we do this in great depth. We'd be looking at every reachable event from each of
+    # the last x events in our worldstate, every time we attempt to make a decision. We can't then call this every
+    # single time we are checking a new event. We need to store at least SOME of the last few reachable events. However,
+    # we can cut down on storage of the whole event by storing a unique key (charStr,envStr,eventStr) as above,
+    # rather than the full event datastructures. We could also attach to each worldstate a populable list of reachable
+    # worldstates. This could benefit us, but does have storage requirements. Perhaps just the runnable events list
+    # should be stored.
+
     def appendAnimationCommand(self, worldstate, characters, environment):
         return "not implemented"
 
