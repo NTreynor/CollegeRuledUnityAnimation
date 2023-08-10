@@ -1,6 +1,9 @@
 import copy
 import math
 
+from run import getRunableEvents
+
+
 class Character:
     def __init__(self, name, health=None, happiness=None, has_job=None, has_beverage=None, exploited=None, \
         murderer=None, stole=None, in_jail=None, fugitive=None, relationships = None, \
@@ -178,6 +181,17 @@ class WorldState:
 
     def __str__(self):
         return ""
+
+    def getRunableEventsText(self, possibleEvents):
+        runable_events = getRunableEvents(self, possibleEvents)
+        eventTextList = []
+        for event in runable_events:
+            eventStr = str(event[0])
+            charsStr = ",".join(str(x) for x in event[2])
+            envStr = ",".join(str(x) for x in event[3])
+            eventString = eventStr+charsStr+envStr
+            eventTextList.append(eventString)
+        return eventTextList
 
 
 class PlotFragment:

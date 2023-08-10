@@ -52,7 +52,6 @@ def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_event
         return random.choice(equallyValubleIndexes), currEventMinDistance
 
 
-
 def distanceBetweenWorldstates(currWorldState, newWorldState):
     distance = 0
     drama_weight = 2
@@ -85,3 +84,25 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
         distance += drama_distance
         #print(drama_distance)
     return distance
+
+def determineCausalityScore(currWorldState):
+    # Look back along the path of worldstate. If along the event history, there are events that are causal
+    # (ie happen immediately after they become possible), we reduce the distance heuristic from that worldstate
+    # to the target worldstate for the pourposes of pathfinding selection, but not for hitting waypoints.
+    # We use each worldstate's stored event history for this, in this manner:
+    """
+        def withinRecentHistoryLimit(self, worldstate, characters, environment, num_recent_events):
+        
+        #checks that a specific instance of this event hasn't occurred within
+        #num_recent_events in the worldstate's history
+        
+        charStr = ""
+        for char in characters:
+            charStr += char.name
+        envStr = ""
+        for env in environment:
+            envStr += env.name
+
+        bool = not ((type(self), charStr, envStr) in worldstate.event_history[-1 * num_recent_events:])
+        return bool
+    """
