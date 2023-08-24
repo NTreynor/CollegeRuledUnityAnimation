@@ -158,6 +158,8 @@ class WorldState:
         self.environments = environments
         self.drama_score = 0
         self.event_history = []  # list of 3D tuples (event, characters involved, environments involved)
+        self.runnable_events = [] # list of 3D tuples (event, characters involved, environments involved) that CAN be used NEXT.
+        self.prior_worldstate = None
         self.radius = radius
         self.drama_curve = desiredDramaCurve
     

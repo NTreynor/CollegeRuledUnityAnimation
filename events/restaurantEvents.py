@@ -67,6 +67,7 @@ class ArrivesInRestaurant(PlotFragment):
         newEnv = reachable_worldstate.environments[env_index] # Grab the environment
         char.location = newEnv # Update character in the new environment
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment) # Pass back new worldstate.
 
     def appendAnimationCommand(self, worldstate, characters, environment):
@@ -109,6 +110,7 @@ class LeavesRestaurant(PlotFragment):
         newEnv = reachable_worldstate.environments[env_index] # Grab the environment
         char.location = newEnv # Update character in the new environment
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment) # Pass back new worldstate.
 
     def appendAnimationCommand(self, worldstate, characters, environment):
@@ -151,6 +153,7 @@ class AquireBeverage(PlotFragment):
         newEnv = reachable_worldstate.environments[env_index] # Grab the environment
         char.has_beverage = True
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment) # Pass back new worldstate.
 
     def appendAnimationCommand(self, worldstate, characters, environment):
@@ -201,6 +204,7 @@ class CoffeeSpill(PlotFragment):
         char_two.updateRelationship(char, -5)
         char.has_beverage = False
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
     def appendAnimationCommand(self, worldstate, characters, environment):
@@ -249,6 +253,7 @@ class ThrowDrink(PlotFragment):
         char_two.updateRelationship(char, -55)
         reachable_worldstate.drama_score += self.drama
         char.has_beverage = False
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
     def appendAnimationCommand(self, worldstate, characters, environment):
@@ -299,6 +304,7 @@ class Befriend(PlotFragment):
         char_one.updateRelationship(char_two, 15)
         char_two.updateRelationship(char_one, 15)
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
     def appendAnimationCommand(self, worldstate, characters, environment):
@@ -347,6 +353,7 @@ class HitOnAccepted(PlotFragment):
         char_one.updateRelationship(char_two, 5)
         char_two.updateRelationship(char_one, 20)
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
     def appendAnimationCommand(self, worldstate, characters, environment):
@@ -397,6 +404,7 @@ class HitOnRejected(PlotFragment):
         char_one.updateRelationship(char_two, -15)
         char_two.updateRelationship(char_one, -15)
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
     def appendAnimationCommand(self, worldstate, characters, environment):
@@ -424,4 +432,5 @@ class DoNothing(PlotFragment):
         #if print_event == True:
         #    print(".")
         self.appendAnimationCommand(worldstate, characters, environment)
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
