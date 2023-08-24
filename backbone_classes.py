@@ -1,8 +1,6 @@
 import copy
 import math
 
-from run import getRunableEvents
-
 
 class Character:
     def __init__(self, name, health=None, happiness=None, has_job=None, has_beverage=None, exploited=None, \
@@ -182,8 +180,17 @@ class WorldState:
     def __str__(self):
         return ""
 
+    def getRunableEvents(current_worldstate, possible_events):
+        runableEvents = []
+        for event in possible_events:  # Check to see if an instance of an event is runnable
+            preconditions_met, characters, environments = event.checkPreconditions(current_worldstate)
+            if preconditions_met:  # If so, add all possible instances to the list of runnable events
+                for x in range(len(characters)):
+                    runableEvents.append([event, current_worldstate, characters[x], environments[x]])
+        return runableEvents
+
     def getRunableEventsText(self, possibleEvents):
-        runable_events = getRunableEvents(self, possibleEvents)
+        runable_events = self.getRunableEvents(possibleEvents)
         eventTextList = []
         for event in runable_events:
             eventStr = str(event[0])
