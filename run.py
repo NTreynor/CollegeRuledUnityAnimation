@@ -83,7 +83,7 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoints = None,
         print(". . .")
         print("(Waypoint hit)")
         print(". . .")
-        if len(waypoints) == 0:
+        if len(waypoints) == 1:
             print("Final waypoint hit! Story finished.")
             print(dramaVals)
             lenOfGraph = len(dramaVals[1])
