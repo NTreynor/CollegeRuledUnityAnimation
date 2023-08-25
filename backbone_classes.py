@@ -158,7 +158,7 @@ class WorldState:
         self.environments = environments
         self.drama_score = 0
         self.event_history = []  # list of 3D tuples (event, characters involved, environments involved)
-        self.runnable_events = [] # list of 3D tuples (event, characters involved, environments involved) that CAN be used NEXT.
+        self.runnable_events = [] # list of strings containing event info to indicate what events were possible.
         self.prior_worldstate = None
         self.radius = radius
         self.drama_curve = desiredDramaCurve
@@ -189,15 +189,26 @@ class WorldState:
             if preconditions_met:  # If so, add all possible instances to the list of runnable events
                 for x in range(len(characters)):
                     runableEvents.append([event, current_worldstate, characters[x], environments[x]])
+        current_worldstate.runnable_events = current_worldstate.getRunableEventsTextFromEventList(runableEvents)
         return runableEvents
 
     def getRunableEventsText(self, possibleEvents):
         runable_events = self.getRunableEvents(possibleEvents)
         eventTextList = []
         for event in runable_events:
-            eventStr = str(event[0])
-            charsStr = ",".join(str(x) for x in event[2])
-            envStr = ",".join(str(x) for x in event[3])
+            eventStr = str(type(event[0]))
+            charsStr = ",".join(str(x.name) for x in event[2])
+            envStr = ",".join(str(x.name) for x in event[3])
+            eventString = eventStr + charsStr + envStr
+            eventTextList.append(eventString)
+        return eventTextList
+
+    def getRunableEventsTextFromEventList(self, runable_events):
+        eventTextList = []
+        for event in runable_events:
+            eventStr = str(type(event[0]))
+            charsStr = ",".join(str(x.name) for x in event[2])
+            envStr = ",".join(str(x.name) for x in event[3])
             eventString = eventStr+charsStr+envStr
             eventTextList.append(eventString)
         return eventTextList
@@ -228,7 +239,7 @@ class PlotFragment:
 
         envStr = ""
         for env in environment:
-            charStr += char.name
+            envStr += env.name
 
         updated_state.event_history.append((type(self), charStr, envStr))
         return updated_state
@@ -243,7 +254,7 @@ class PlotFragment:
             charStr += char.name
         envStr = ""
         for env in environment:
-            charStr += char.name
+            envStr += env.name
 
         numOccurances = (worldstate.event_history.count((type(self), charStr, envStr)))
         return (numOccurances < repeat_limit)

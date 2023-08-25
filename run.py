@@ -28,7 +28,8 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoints = None,
     if (depth_limit == 0):
         return current_worldstate
     
-    runable_events = getRunableEvents(current_worldstate, possible_events)
+    #runable_events = getRunableEvents(current_worldstate, possible_events)
+    runable_events = current_worldstate.getRunableEvents(possible_events)
     if len(runable_events) == 0:
         print("THE END")
         return current_worldstate
