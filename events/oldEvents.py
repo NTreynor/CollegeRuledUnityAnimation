@@ -30,6 +30,7 @@ class MoneyProblems(PlotFragment):
         char = reachable_worldstate.characters[char_index]
         char.updateHappiness(-2)
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 class GetMiningJob(PlotFragment):
@@ -60,6 +61,7 @@ class GetMiningJob(PlotFragment):
         char.updateHappiness(2)
         char.has_job = True
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
@@ -90,6 +92,7 @@ class GetRejectedFromJob(PlotFragment):
         char = reachable_worldstate.characters[char_index]
         char.updateHappiness(-1)
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
@@ -121,6 +124,7 @@ class GetSpaceShuttleJob(PlotFragment):
         char.updateHappiness(5)
         char.has_job = True
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
@@ -151,6 +155,7 @@ class LoseJob(PlotFragment):
         char.updateHappiness(-5)
         char.has_job = False
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 

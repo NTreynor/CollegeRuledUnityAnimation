@@ -52,10 +52,11 @@ def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_event
         return random.choice(equallyValubleIndexes), currEventMinDistance
 
 
-
 def distanceBetweenWorldstates(currWorldState, newWorldState):
     distance = 0
     drama_weight = 2
+    causalityWeight = 10
+
     if currWorldState.characters:
         for character in currWorldState.characters:
             for future_character in newWorldState.characters:
@@ -66,6 +67,10 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
     if len(currWorldState.characters) != len(newWorldState.characters):
         deadCharacterPenalty = abs(len(currWorldState.characters)-len(newWorldState.characters)) * 50 # Change this value to change weight of undesired deaths.
         distance += deadCharacterPenalty
+
+    causalityScore = determineCausalityScore(currWorldState)
+    if causalityScore != 0:
+        distance -= causalityScore * causalityWeight
 
     # Drama scores using drama curve methodology
     if newWorldState.getDramaCurve() != None:
@@ -85,3 +90,47 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
         distance += drama_distance
         #print(drama_distance)
     return distance
+
+def determineCausalityScore(currWorldState):
+    # Look back along the path of worldstate. If along the event history, there are events that are causal
+    # (ie happen immediately after they become possible), we reduce the distance heuristic from that worldstate
+    # to the target worldstate for the pourposes of pathfinding selection, but not for hitting waypoints.
+    # We use each worldstate's stored event history for this, in this manner:
+
+    lastEvent = currWorldState.event_history[-1 * 1:][0]
+    eventStr = str(lastEvent[0])
+    charsStr = lastEvent[1]
+    envStr = lastEvent[2]
+    lastEventString = eventStr + charsStr + envStr
+
+    oldPossibleEvents = None
+    if currWorldState.prior_worldstate != None:
+        prior = currWorldState.prior_worldstate
+        if prior.prior_worldstate != None:
+            oldPossibleEvents = prior.prior_worldstate.runnable_events
+
+    if oldPossibleEvents:
+        if lastEventString in oldPossibleEvents:
+            #print("non-casual event.")
+            return 0
+        else:
+            #print("causal event.")
+            return 1
+    return 0
+
+    """
+        def withinRecentHistoryLimit(self, worldstate, characters, environment, num_recent_events):
+        
+        #checks that a specific instance of this event hasn't occurred within
+        #num_recent_events in the worldstate's history
+        
+        charStr = ""
+        for char in characters:
+            charStr += char.name
+        envStr = ""
+        for env in environment:
+            envStr += env.name
+
+        bool = not ((type(self), charStr, envStr) in worldstate.event_history[-1 * num_recent_events:])
+        return bool
+    """
