@@ -55,7 +55,7 @@ def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_event
 def distanceBetweenWorldstates(currWorldState, newWorldState):
     distance = 0
     drama_weight = 2
-    causalityWeight = 10
+    causalityWeight = 1
 
     if currWorldState.characters:
         for character in currWorldState.characters:
@@ -117,20 +117,3 @@ def determineCausalityScore(currWorldState):
             #print("causal event.")
             return 1
     return 0
-
-    """
-        def withinRecentHistoryLimit(self, worldstate, characters, environment, num_recent_events):
-        
-        #checks that a specific instance of this event hasn't occurred within
-        #num_recent_events in the worldstate's history
-        
-        charStr = ""
-        for char in characters:
-            charStr += char.name
-        envStr = ""
-        for env in environment:
-            envStr += env.name
-
-        bool = not ((type(self), charStr, envStr) in worldstate.event_history[-1 * num_recent_events:])
-        return bool
-    """
