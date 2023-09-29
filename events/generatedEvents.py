@@ -66,7 +66,7 @@ class BreakingPointDuel(PlotFragment):
         char_two = reachable_worldstate.characters[char_two_index]
 
         # Simulate the duel and its consequences deterministically
-        duel_winner, duel_loser = self.simulateDuel(char_one, char_two)
+        duel_winner, duel_loser = self.simulateDuel(char_one, char_two, print_event)
 
         # Apply injuries to the duel loser
         duel_loser.updateHealth(-40)  # Adjust injury severity as needed
@@ -79,9 +79,9 @@ class BreakingPointDuel(PlotFragment):
         reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
-    def simulateDuel(self, character1, character2):
+    def simulateDuel(self, character1, character2, print_event):
         # Use initial health and relationship values as seed for deterministic outcome
-        seed = hash((character1.initial_health, character2.initial_health, character1.initial_relationships[character2]))
+        seed = hash((character1.health, character2.health, character1.relationships[character2]))
 
         # Initialize random seed for deterministic randomness
         random.seed(seed)
@@ -101,54 +101,62 @@ class BreakingPointDuel(PlotFragment):
             defender = character1
 
         # Simulate the duel with specific details
-        print(
-            "{} wields a {}, while {} defends with a {}.".format(
-                attacker.name, weapon1, defender.name, weapon2
+
+        if print_event:
+            print(
+                "{} wields a {}, while {} defends with a {}.".format(
+                    attacker.name, weapon1, defender.name, weapon2
+                )
             )
-        )
 
         # Determine the outcome of the duel
         if attacker == character1:
             # Character 1 attacks first
-            print(
-                "{} strikes first with a powerful swing of their {}. They catch {} off guard.".format(
-                    attacker.name, weapon1, defender.name
-                )
-            )
-            if strength1 > strength2:
+            if print_event:
                 print(
-                    "{}'s attack overwhelms {}. They manage to disarm {} and land a critical blow.".format(
-                        attacker.name, defender.name, defender.name
+                    "{} strikes first with a powerful swing of their {}. They catch {} off guard.".format(
+                        attacker.name, weapon1, defender.name
                     )
                 )
+            if strength1 > strength2:
+                if print_event:
+                    print(
+                        "{}'s attack overwhelms {}. They manage to disarm {} and land a critical blow.".format(
+                            attacker.name, defender.name, defender.name
+                        )
+                    )
                 return character1, character2
             else:
-                print(
-                    "{}'s attack is strong, but {} manages to parry and counter, landing a hit on {}.".format(
-                        attacker.name, defender.name, attacker.name
+                if print_event:
+                    print(
+                        "{}'s attack is strong, but {} manages to parry and counter, landing a hit on {}.".format(
+                            attacker.name, defender.name, attacker.name
+                        )
                     )
-                )
                 return character2, character1
         else:
             # Character 2 attacks first
-            print(
-                "{} lunges forward with their {}. {} narrowly avoids the attack.".format(
-                    attacker.name, weapon2, defender.name
-                )
-            )
-            if strength2 > strength1:
+            if print_event:
                 print(
-                    "{} manages to regain control and swiftly strikes back, disarming {} and injuring them.".format(
-                        attacker.name, defender.name
+                    "{} lunges forward with their {}. {} narrowly avoids the attack.".format(
+                        attacker.name, weapon2, defender.name
                     )
                 )
+            if strength2 > strength1:
+                if print_event:
+                    print(
+                        "{} manages to regain control and swiftly strikes back, disarming {} and injuring them.".format(
+                            attacker.name, defender.name
+                        )
+                    )
                 return character2, character1
             else:
-                print(
-                    "{} retaliates with a swift move, but {}'s defense holds. They engage in a fierce exchange of blows.".format(
-                        attacker.name, defender.name
+                if print_event:
+                    print(
+                        "{} retaliates with a swift move, but {}'s defense holds. They engage in a fierce exchange of blows.".format(
+                            attacker.name, defender.name
+                        )
                     )
-                )
                 return character1, character2
 
 class BreakingPoint(PlotFragment):
@@ -219,48 +227,6 @@ class BreakingPoint(PlotFragment):
         reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
-    class IrritateMild(PlotFragment):
-        def __init__(self):
-            self.drama = 6
-
-        def checkPreconditions(self, worldstate):
-            valid_characters = []
-            environments = []
-            if not self.withinRepeatLimit(worldstate, 3):
-                return False, None, environments
-            for character in worldstate.characters:
-                for character2 in worldstate.characters:
-                    if character != character2:
-                        if character.sameLoc(character2):
-                            if character.relationships[character2] >= -10:  # Ensure the relationship isn't too strained
-                                if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 3):
-                                    if self.withinRecentHistoryLimit(worldstate, [character2, character], [], 2):
-                                        if self.withinInstanceLimit(worldstate, [character, character2], [], 2):
-                                            valid_characters.append([character, character2])
-                                            environments.append([])
-
-            if valid_characters:
-                return True, valid_characters, environments
-            else:
-                return False, None, environments
-
-        def doEvent(self, worldstate, characters, environment, print_event=True):
-            reachable_worldstate = copy.deepcopy(worldstate)
-            reachable_worldstate.index += 1
-            if print_event:
-                print(
-                    "{} irritates {} with their constant complaining and negativity. The atmosphere becomes tense.".format(
-                        characters[0].name, characters[1].name))
-                self.appendAnimationCommand(worldstate, characters, environment)
-            char_one_index = worldstate.characters.index(characters[0])
-            char_two_index = worldstate.characters.index(characters[1])
-            char_one = reachable_worldstate.characters[char_one_index]
-            char_two = reachable_worldstate.characters[char_two_index]
-            char_one.updateRelationship(char_two, -5)  # Mild irritation
-            char_two.updateRelationship(char_one, -5)  # Mild irritation
-            reachable_worldstate.drama_score += self.drama
-            reachable_worldstate.prior_worldstate = worldstate
-            return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 class IrritateMild(PlotFragment):
     def __init__(self):

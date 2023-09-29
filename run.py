@@ -273,7 +273,7 @@ if __name__ == "__main__":
     #possibleEvents = [GetMiningJob(), GetSpaceShuttleJob(), CoffeeSpill(), LoseJob(), DoNothing(), MoneyProblems(),
     #                  GetRejectedFromJob(), ArrivesInRestaurant()]
 
-    possibleEvents = [CoffeeSpill(), DoNothing(), ArrivesInRestaurant(), LeavesRestaurant(), AquireBeverage(), ThrowDrink(), Befriend(), HitOnAccepted(), HitOnRejected()]
+    possibleEvents = [CoffeeSpill(), DoNothing(), ArrivesInRestaurant(), LeavesRestaurant(), AquireBeverage(), ThrowDrink(), Befriend(), HitOnAccepted(), HitOnRejected(), BefriendModerate(), BefriendSlight(), BefriendStrong(), IrritateStrong(), IrritateMild(), IrritateIncreasing(), BreakingPoint(), BreakingPointDuel()]
 
     numStories = 10
     dramaValList = []
