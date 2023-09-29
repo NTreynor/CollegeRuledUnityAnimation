@@ -54,8 +54,10 @@ def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_event
 
 def distanceBetweenWorldstates(currWorldState, newWorldState):
     distance = 0
+    #drama_weight = 0
     drama_weight = 2
-    causalityWeight = 1
+    causalityWeight = 0.5
+    #causalityWeight = 0
 
     if currWorldState.characters:
         for character in currWorldState.characters:

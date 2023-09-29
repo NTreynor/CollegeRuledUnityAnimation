@@ -1,13 +1,4 @@
 Dylan, Approach_Jessica
 Dylan, Chat_Jessica
-Jessica, React_Negative
-Jessica, Walk_In
 Dylan, Walk_In
-Dylan, Approach_Jessica
-Dylan, Chat_Jessica
-Jessica, Spill_Drink
-Dylan, Approach_Jessica
-Dylan, Chat_Jessica
-Jessica, React_Positive
-Jessica, Walk_Out
 Jessica, Walk_In

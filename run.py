@@ -295,11 +295,15 @@ if __name__ == "__main__":
     currDramaMax = [0] * lenOfGraph
     for x in range(numStories):
         for y in range(lenOfGraph):
-            currDramaMean[y] += dramaValList[x][0][y]
-            if currDramaMax[y] < dramaValList[x][0][y]:
-                currDramaMax[y] = dramaValList[x][0][y]
-            if currDramaMin[y] > dramaValList[x][0][y]:
-                currDramaMin[y] = dramaValList[x][0][y]
+            try:
+                currDramaVal = dramaValList[x][0][y]
+            except:
+                currDramaVal = 0
+            currDramaMean[y] += currDramaVal
+            if currDramaMax[y] < currDramaVal:
+                currDramaMax[y] = currDramaVal
+            if currDramaMin[y] > currDramaVal:
+                currDramaMin[y] = currDramaVal
 
     for index in range(lenOfGraph):
         currDramaMean[index] = currDramaMean[index] / numStories # adjust mean appropriately
@@ -308,7 +312,11 @@ if __name__ == "__main__":
     currDramaData = [[0 for i in range(numStories)] for j in range(lenOfGraph)]
     for x in range(numStories):
         for y in range(lenOfGraph):
-            currDramaData[y][x] = dramaValList[x][0][y]
+            try:
+                currDramaVal = dramaValList[x][0][y]
+            except:
+                currDramaVal = 0
+            currDramaData[y][x] = currDramaVal
 
     fig = plt.figure(figsize=(12, 10))
 
