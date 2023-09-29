@@ -1,6 +1,7 @@
 from backbone_classes import *
 from events.oldEvents import *
 from events.restaurantEvents import *
+from events.generatedEvents import *
 from path_finding import *
 import numpy as np
 import matplotlib.pyplot as plt
