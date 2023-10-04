@@ -489,5 +489,332 @@ class BefriendStrong(PlotFragment):
         reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
+class MildIgnorantAnnoyance(PlotFragment):
+    def __init__(self):
+        self.drama = 3  # Mild annoyance, lower drama score
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+
+        annoyance_threshold = -10  # Adjust as needed
+
+        if not self.withinRepeatLimit(worldstate, 3):
+            return False, None, environments
+        for character in worldstate.characters:
+            for character2 in worldstate.characters:
+                if character != character2:
+                    if character.sameLoc(character2):
+                        if (
+                                character.relationships[character2] <= annoyance_threshold
+                                and character.relationships[character2] >= -100
+                        ):
+                            if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 3):
+                                if self.withinRecentHistoryLimit(worldstate, [character2, character], [], 2):
+                                    if self.withinInstanceLimit(worldstate, [character, character2], [], 2):
+                                        valid_characters.append([character, character2])
+                                        environments.append([])
+
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        reachable_worldstate.index += 1
+
+        char_one_index = worldstate.characters.index(characters[0])
+        char_two_index = worldstate.characters.index(characters[1])
+        char_one = reachable_worldstate.characters[char_one_index]
+        char_two = reachable_worldstate.characters[char_two_index]
+
+        annoyance_source = "constant tapping of a pen"  # Adjust as needed
+        char_one.updateRelationship(char_two, -5)  # Mild worsening of relationship due to annoyance
+
+        if print_event:
+            print(
+                "{} finds {}'s {} mildly annoying, but {} remains completely unaware of their impact.".format(
+                    characters[0].name, characters[1].name, annoyance_source, characters[1].name
+                )
+            )
+            self.appendAnimationCommand(worldstate, characters, environment)
+
+        reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+class ModerateIgnorantAnnoyance(PlotFragment):
+    def __init__(self):
+        self.drama = 7  # Moderate annoyance, medium drama score
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+
+        annoyance_threshold = -15  # Adjust as needed
+
+        if not self.withinRepeatLimit(worldstate, 3):
+            return False, None, environments
+        for character in worldstate.characters:
+            for character2 in worldstate.characters:
+                if character != character2:
+                    if character.sameLoc(character2):
+                        if (
+                                character.relationships[character2] <= annoyance_threshold
+                                and character.relationships[character2] >= -100
+                        ):
+                            if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 3):
+                                if self.withinRecentHistoryLimit(worldstate, [character2, character], [], 2):
+                                    if self.withinInstanceLimit(worldstate, [character, character2], [], 2):
+                                        valid_characters.append([character, character2])
+                                        environments.append([])
+
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        reachable_worldstate.index += 1
+
+        char_one_index = worldstate.characters.index(characters[0])
+        char_two_index = worldstate.characters.index(characters[1])
+        char_one = reachable_worldstate.characters[char_one_index]
+        char_two = reachable_worldstate.characters[char_two_index]
+
+        annoyance_source = "constant loud music"  # Adjust as needed
+        char_one.updateRelationship(char_two, -12)  # Moderate worsening of relationship due to annoyance
+
+        if print_event:
+            print(
+                "{} finds {}'s {} increasingly annoying, and tension simmers, but {} remains completely unaware of their impact.".format(
+                    characters[0].name, characters[1].name, annoyance_source, characters[1].name
+                )
+            )
+            self.appendAnimationCommand(worldstate, characters, environment)
+
+        reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+class SevereIgnorantAnnoyance(PlotFragment):
+    def __init__(self):
+        self.drama = 10  # Severe annoyance, higher drama score
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+
+        annoyance_threshold = -20  # Adjust as needed
+
+        if not self.withinRepeatLimit(worldstate, 3):
+            return False, None, environments
+        for character in worldstate.characters:
+            for character2 in worldstate.characters:
+                if character != character2:
+                    if character.sameLoc(character2):
+                        if (
+                                character.relationships[character2] <= annoyance_threshold
+                                and character.relationships[character2] >= -100
+                        ):
+                            if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 3):
+                                if self.withinRecentHistoryLimit(worldstate, [character2, character], [], 2):
+                                    if self.withinInstanceLimit(worldstate, [character, character2], [], 2):
+                                        valid_characters.append([character, character2])
+                                        environments.append([])
+
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        reachable_worldstate.index += 1
+
+        char_one_index = worldstate.characters.index(characters[0])
+        char_two_index = worldstate.characters.index(characters[1])
+        char_one = reachable_worldstate.characters[char_one_index]
+        char_two = reachable_worldstate.characters[char_two_index]
+
+        annoyance_source = "incessant complaining"  # Adjust as needed
+        char_one.updateRelationship(char_two, -18)  # Severe worsening of relationship due to annoyance
+
+        if print_event:
+            print(
+                "{} finds {}'s {} unbearably annoying, and their patience wears thin, but {} remains completely unaware of their impact.".format(
+                    characters[0].name, characters[1].name, annoyance_source, characters[1].name
+                )
+            )
+            self.appendAnimationCommand(worldstate, characters, environment)
+
+        reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+class MildIntentionalAnnoyance(PlotFragment):
+    def __init__(self):
+        self.drama = 3  # Mild annoyance, lower drama score
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+
+        annoyance_threshold = -10  # Threshold for mild annoyance
+
+        if not self.withinRepeatLimit(worldstate, 3):
+            return False, None, environments
+
+        for character in worldstate.characters:
+            for character2 in worldstate.characters:
+                if character != character2:
+                    if character.sameLoc(character2):
+                        if (
+                                character.relationships[character2] >= annoyance_threshold
+                                and character.relationships[character2] <= 0
+                        ):
+                            valid_characters.append([character, character2])
+                            environments.append([])
+
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        reachable_worldstate.index += 1
+
+        char_one_index = worldstate.characters.index(characters[0])
+        char_two_index = worldstate.characters.index(characters[1])
+        char_one = reachable_worldstate.characters[char_one_index]
+        char_two = reachable_worldstate.characters[char_two_index]
+
+        annoyance_source = "constant jokes and playful teasing"  # Adjust as needed
+        char_one.updateRelationship(char_two, -5)  # Mild worsening of relationship due to teasing
+
+        if print_event:
+            print(
+                "{} intentionally annoys {} with {} to get a reaction, but {} tries to take it in stride.".format(
+                    characters[0].name, characters[1].name, annoyance_source, characters[1].name
+                )
+            )
+            self.appendAnimationCommand(worldstate, characters, environment)
+
+        reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+class ModerateIntentionalAnnoyance(PlotFragment):
+    def __init__(self):
+        self.drama = 7  # Moderate annoyance, medium drama score
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+
+        annoyance_threshold = -15  # Threshold for moderate annoyance
+
+        if not self.withinRepeatLimit(worldstate, 3):
+            return False, None, environments
+
+        for character in worldstate.characters:
+            for character2 in worldstate.characters:
+                if character != character2:
+                    if character.sameLoc(character2):
+                        if (
+                                character.relationships[character2] >= annoyance_threshold
+                                and character.relationships[character2] <= 0
+                        ):
+                            valid_characters.append([character, character2])
+                            environments.append([])
+
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        reachable_worldstate.index += 1
+
+        char_one_index = worldstate.characters.index(characters[0])
+        char_two_index = worldstate.characters.index(characters[1])
+        char_one = reachable_worldstate.characters[char_one_index]
+        char_two = reachable_worldstate.characters[char_two_index]
+
+        annoyance_source = "persistent mocking and sarcastic remarks"  # Adjust as needed
+        char_one.updateRelationship(char_two, -12)  # Moderate worsening of relationship due to teasing
+
+        if print_event:
+            print(
+                "{} intentionally annoys {} with {} to provoke a reaction, and {} struggles to maintain composure.".format(
+                    characters[0].name, characters[1].name, annoyance_source, characters[1].name
+                )
+            )
+            self.appendAnimationCommand(worldstate, characters, environment)
+
+        reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+class SevereIntentionalAnnoyance(PlotFragment):
+    def __init__(self):
+        self.drama = 10  # Severe annoyance, higher drama score
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+
+        annoyance_threshold = -20  # Threshold for severe annoyance
+
+        if not self.withinRepeatLimit(worldstate, 3):
+            return False, None, environments
+
+        for character in worldstate.characters:
+            for character2 in worldstate.characters:
+                if character != character2:
+                    if character.sameLoc(character2):
+                        if (
+                                character.relationships[character2] >= annoyance_threshold
+                                and character.relationships[character2] <= 0
+                        ):
+                            valid_characters.append([character, character2])
+                            environments.append([])
+
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        reachable_worldstate.index += 1
+
+        char_one_index = worldstate.characters.index(characters[0])
+        char_two_index = worldstate.characters.index(characters[1])
+        char_one = reachable_worldstate.characters[char_one_index]
+        char_two = reachable_worldstate.characters[char_two_index]
+
+        annoyance_source = "merciless taunting and personal attacks"  # Adjust as needed
+        char_one.updateRelationship(char_two, -18)  # Severe worsening of relationship due to teasing
+
+        if print_event:
+            print(
+                "{} intentionally annoys {} with {} to provoke a reaction, and the tension escalates to the breaking point.".format(
+                    characters[0].name, characters[1].name, annoyance_source
+                )
+            )
+            self.appendAnimationCommand(worldstate, characters, environment)
+
+        reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+
+
+
 
 
