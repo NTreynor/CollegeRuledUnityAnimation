@@ -133,11 +133,11 @@ class AskOnDate(PlotFragment):
         if not self.withinRepeatLimit(worldstate, 4):
             return False, None, environments
         for character in worldstate.characters:
-                for character2 in character.relationships:
-                    if (character.relationships[character2] > 50) & (character.romantic_partner == None or character.romantic_partner == False):
-                        if self.withinInstanceLimit(worldstate, [character, character2], [], 1):
-                            valid_characters.append([character, character2])
-                            environments.append([])
+            for character2 in character.relationships:
+                if (character.relationships[character2] > 50) & (character.romantic_partner == None or character.romantic_partner == False):
+                    if self.withinInstanceLimit(worldstate, [character, character2], [], 1):
+                        valid_characters.append([character, character2])
+                        environments.append([])
 
         if valid_characters:
             return True, valid_characters, environments

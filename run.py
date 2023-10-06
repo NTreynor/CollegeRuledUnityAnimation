@@ -406,7 +406,7 @@ if __name__ == "__main__":
         #initWorldState, waypoints = waypointTestEnvironmentSimple()
         #initWorldState, waypoints = waypointTestEnvironmentDramatic()
         #initWorldState, waypoints = waypointTestEnvironment()
-        initWorldState, waypoints = SciFiwaypointTestEnvironmentAlt()
+        initWorldState, waypoints = SciFiwaypointTestEnvironment()
         dramaValuesInstance = runStory(initWorldState, NoRestaurantPossibleEvents, 15, waypoints, lookaheadDepth=2)
         dramaValList.append(dramaValuesInstance)
         f.close()
