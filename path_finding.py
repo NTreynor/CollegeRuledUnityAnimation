@@ -2,7 +2,7 @@ from backbone_classes import *
 from events.oldEvents import *
 import random
 
-from run import getRunableEvents
+from run import *
 
 
 def selectEventIndex(eventList, desiredWorldState):
@@ -55,8 +55,8 @@ def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_event
 def distanceBetweenWorldstates(currWorldState, newWorldState):
     distance = 0
     #drama_weight = 0
-    drama_weight = 2
-    causalityWeight = 0.5
+    drama_weight = 0
+    causalityWeight = 1.5
     #causalityWeight = 0
 
     if currWorldState.characters:
@@ -98,6 +98,8 @@ def determineCausalityScore(currWorldState):
     # (ie happen immediately after they become possible), we reduce the distance heuristic from that worldstate
     # to the target worldstate for the pourposes of pathfinding selection, but not for hitting waypoints.
     # We use each worldstate's stored event history for this, in this manner:
+    if len(currWorldState.event_history) == 0:
+        return 0
 
     lastEvent = currWorldState.event_history[-1 * 1:][0]
     eventStr = str(lastEvent[0])
@@ -119,3 +121,20 @@ def determineCausalityScore(currWorldState):
             #print("causal event.")
             return 1
     return 0
+
+def getRunableEvents(current_worldstate, possible_events):
+    runableEvents = []
+    for event in possible_events: # Check to see if an instance of an event is runnable
+        preconditions_met, characters, environments = event.checkPreconditions(current_worldstate)
+        if preconditions_met: # If so, add all possible instances to the list of runnable events
+            for x in range(len(characters)):
+                runableEvents.append([event, current_worldstate, characters[x], environments[x]])
+    return runableEvents
+
+def getReachableWorldstates(current_worldstate, possible_events):
+    NeighborWorldstates = []
+    runableEvents = getRunableEvents(current_worldstate, possible_events)
+    for x in range (len(runableEvents)):
+        reachable_worldstate = runableEvents[x][0].getNewWorldState(runableEvents[x][1], runableEvents[x][2], runableEvents[x][3])
+        NeighborWorldstates.append(reachable_worldstate)
+    return NeighborWorldstates

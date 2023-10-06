@@ -14,16 +14,6 @@ import seaborn as sns
 from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
 
-def getRunableEvents(current_worldstate, possible_events):
-    runableEvents = []
-    for event in possible_events: # Check to see if an instance of an event is runnable
-        preconditions_met, characters, environments = event.checkPreconditions(current_worldstate)
-        if preconditions_met: # If so, add all possible instances to the list of runnable events
-            for x in range(len(characters)):
-                runableEvents.append([event, current_worldstate, characters[x], environments[x]])
-    return runableEvents
-
-
 def runStory(current_worldstate, possible_events, depth_limit, waypoints = None, lookaheadDepth=2, drama_weight=3, dramaVals = None):
     if dramaVals is None:
         currDramaVals = []
@@ -276,6 +266,10 @@ def waypointTestEnvironmentDramatic():
 def SciFiwaypointTestEnvironment():
     # Environment Initialization
 
+    # Drama curve Initialization
+    params = [[5.5, 8], [2.5, 13]]
+    testCurve = DramaCurve(2, params, 16, 70)
+
     wp_serenity = Environment("Serenity", 25)
     wp_space = Environment("Space", -100)
     wp_serenity.setDistance(wp_space, 0)
@@ -295,7 +289,7 @@ def SciFiwaypointTestEnvironment():
 
     wp_environments = [wp_serenity, wp_space]
     wp_chars = [wp_jess, wp_mal, wp_inara]
-    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments)
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, None, testCurve)
 
     wp_init_worldstate = copy.deepcopy(wp_curr_worldstate) # Save FIRST worldstate
 
@@ -313,7 +307,7 @@ def SciFiwaypointTestEnvironment():
     wp_mal.romantic_partner = wp_jess
     wp_chars = [wp_jess, wp_mal, wp_inara]
 
-    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 10)
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 10, testCurve)
     wp_2_worldstate = copy.deepcopy(wp_curr_worldstate) # Save second waypoint
     wp_2_worldstate.drama_score = 15
 
@@ -330,7 +324,7 @@ def SciFiwaypointTestEnvironment():
     wp_chars = [wp_mal, wp_inara]
 
 
-    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 40)
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 40, testCurve)
     wp_3_worldstate = copy.deepcopy(wp_curr_worldstate) # Save third waypoint
     wp_3_worldstate.drama_score = 100
 
@@ -397,7 +391,7 @@ if __name__ == "__main__":
     NoRestaurantPossibleEvents = [CoffeeSpill(), DoNothing(), ThrowDrink(), Befriend(), HitOnAccepted(), HitOnRejected(), BefriendModerate(), BefriendSlight(), BefriendStrong(), IrritateStrong(), IrritateMild(), IrritateIncreasing(), BreakingPoint(), BreakingPointDuel(), MildIntentionalAnnoyance(), ModerateIntentionalAnnoyance(), SevereIntentionalAnnoyance(), MildIgnorantAnnoyance(), ModerateIgnorantAnnoyance(), SevereIgnorantAnnoyance(), FallInLove(), AskOnDate(), HitBySpaceCar(), GetMiningJob(),
                       GetSpaceShuttleJob(), GoToSpaceJail(), SoloJailbreak(), CoffeeSpill(),
                       HospitalVisit(), Cheat(), Steal(), Irritate(), Befriend(), LoseJob(),
-                      AssistedJailBreak(), SabotagedJailBreak(), DoNothing(), MoneyProblems(), GetRejectedFromJob()]
+                      AssistedJailBreak(), SabotagedJailBreak(), DoNothing(), GetRejectedFromJob()]
 
     numStories = 10
     dramaValList = []
@@ -406,7 +400,7 @@ if __name__ == "__main__":
         #initWorldState, waypoints = waypointTestEnvironmentSimple()
         #initWorldState, waypoints = waypointTestEnvironmentDramatic()
         #initWorldState, waypoints = waypointTestEnvironment()
-        initWorldState, waypoints = SciFiwaypointTestEnvironment()
+        initWorldState, waypoints = SciFiwaypointTestEnvironmentAlt()
         dramaValuesInstance = runStory(initWorldState, NoRestaurantPossibleEvents, 15, waypoints, lookaheadDepth=2)
         dramaValList.append(dramaValuesInstance)
         f.close()
