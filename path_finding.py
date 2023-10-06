@@ -55,8 +55,8 @@ def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_event
 def distanceBetweenWorldstates(currWorldState, newWorldState):
     distance = 0
     #drama_weight = 0
-    drama_weight = 0
-    causalityWeight = 1.5
+    drama_weight = 1
+    causalityWeight = 3
     #causalityWeight = 0
 
     if currWorldState.characters:
@@ -67,7 +67,7 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
                     distance += distanceBetweenVersions
 
     if len(currWorldState.characters) != len(newWorldState.characters):
-        deadCharacterPenalty = abs(len(currWorldState.characters)-len(newWorldState.characters)) * 50 # Change this value to change weight of undesired deaths.
+        deadCharacterPenalty = abs(len(currWorldState.characters)-len(newWorldState.characters)) * 150 # Change this value to change weight of undesired deaths.
         distance += deadCharacterPenalty
 
     causalityScore = determineCausalityScore(currWorldState)

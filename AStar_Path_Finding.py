@@ -44,6 +44,7 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events):
         _, current_node = heapq.heappop(open_set)
 
         distanceToTarget = heuristic(current_node.state, goal_state)
+        print(distanceToTarget)
         if distanceToTarget < 100:
             print(distanceToTarget)
         if distanceToTarget < 50:
