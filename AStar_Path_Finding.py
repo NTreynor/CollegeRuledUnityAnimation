@@ -1,4 +1,4 @@
-import heapq
+import RandomPopHeapQ
 from backbone_classes import *
 from events.oldEvents import *
 from events.restaurantEvents import *
@@ -9,6 +9,7 @@ from events.love_events import *
 from events.generatedEvents import *
 
 from path_finding import *
+import random
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -38,10 +39,13 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events):
 
     # Create the initial node
     start_node = Node(state=start_state, cost=0, heuristic=heuristic(start_state, goal_state))
-    heapq.heappush(open_set, (start_node.total_cost(), start_node))
+    RandomPopHeapQ.heappush(open_set, (start_node.total_cost(), start_node))
 
     while open_set:
-        _, current_node = heapq.heappop(open_set)
+        if random.random() < .5:
+            _, current_node = RandomPopHeapQ.heappop(open_set)
+        else:
+            _, current_node = RandomPopHeapQ.heaprandpop(open_set)
 
         distanceToTarget = heuristic(current_node.state, goal_state)
         print(distanceToTarget)
@@ -77,7 +81,7 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events):
                     cost=new_cost,
                     heuristic=heuristic(neighbor_state, goal_state)
                 )
-                heapq.heappush(open_set, (neighbor_node.total_cost(), neighbor_node))
+                RandomPopHeapQ.heappush(open_set, (neighbor_node.total_cost(), neighbor_node))
 
     # If no path is found, return an empty list
     return []
