@@ -55,7 +55,7 @@ def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_event
 def distanceBetweenWorldstates(currWorldState, newWorldState):
     distance = 0
     #drama_weight = 0
-    drama_weight = 1
+    drama_weight = 0
     causalityWeight = 3
     #causalityWeight = 0
 
@@ -131,10 +131,21 @@ def getRunableEvents(current_worldstate, possible_events):
                 runableEvents.append([event, current_worldstate, characters[x], environments[x]])
     return runableEvents
 
-def getReachableWorldstates(current_worldstate, possible_events):
-    NeighborWorldstates = []
-    runableEvents = getRunableEvents(current_worldstate, possible_events)
-    for x in range (len(runableEvents)):
-        reachable_worldstate = runableEvents[x][0].getNewWorldState(runableEvents[x][1], runableEvents[x][2], runableEvents[x][3])
-        NeighborWorldstates.append(reachable_worldstate)
-    return NeighborWorldstates
+def getReachableWorldstates(current_worldstate, possible_events, depthlimit = 0):
+    if depthlimit == 0:
+        NeighborWorldstates = []
+        runableEvents = getRunableEvents(current_worldstate, possible_events)
+        for x in range (len(runableEvents)):
+            reachable_worldstate = runableEvents[x][0].getNewWorldState(runableEvents[x][1], runableEvents[x][2], runableEvents[x][3])
+            NeighborWorldstates.append(reachable_worldstate)
+        return NeighborWorldstates
+    else:
+        if len(current_worldstate.event_history) < depthlimit:
+            NeighborWorldstates = []
+            runableEvents = getRunableEvents(current_worldstate, possible_events)
+            for x in range(len(runableEvents)):
+                reachable_worldstate = runableEvents[x][0].getNewWorldState(runableEvents[x][1], runableEvents[x][2],
+                                                                            runableEvents[x][3])
+                NeighborWorldstates.append(reachable_worldstate)
+            return NeighborWorldstates
+        return []

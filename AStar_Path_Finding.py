@@ -33,7 +33,7 @@ class Node:
     def __gt__(self, other):
         return (self.total_cost() > other.total_cost(other))
 
-def astar_search(start_state, goal_state, get_neighbors, heuristic, events):
+def astar_search(start_state, goal_state, get_neighbors, heuristic, events, depthLimit = 15):
     open_set = []  # Priority queue for nodes to be evaluated
     closed_set = set()  # Set to keep track of visited nodes
 
@@ -51,7 +51,7 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events):
         print(distanceToTarget)
         if distanceToTarget < 100:
             print(distanceToTarget)
-        if distanceToTarget < 50:
+        if distanceToTarget < 20:
             # Found the goal, reconstruct the path
             path = []
             while current_node:
@@ -61,7 +61,7 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events):
 
         closed_set.add(current_node.state)
 
-        for neighbor_state in get_neighbors(current_node.state, events):
+        for neighbor_state in get_neighbors(current_node.state, events, depthLimit):
             if neighbor_state in closed_set:
                 continue
 
@@ -86,8 +86,8 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events):
     # If no path is found, return an empty list
     return []
 
-def get_neighbors(state, possible_events):
-    return getReachableWorldstates(state, possible_events)
+def get_neighbors(state, possible_events, depthLimit):
+    return getReachableWorldstates(state, possible_events, depthLimit)
 
 def heuristic(state, goal_state):
     return distanceBetweenWorldstates(state, goal_state)
@@ -102,4 +102,5 @@ initWorldState, waypoints = SciFiwaypointTestEnvironmentAlt()
 start_state = initWorldState
 goal_state = waypoints[0]
 path = astar_search(start_state, goal_state, get_neighbors, heuristic, NoRestaurantPossibleEvents)
+for 
 print(path)
