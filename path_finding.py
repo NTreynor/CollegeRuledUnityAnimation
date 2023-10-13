@@ -56,7 +56,7 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
     distance = 0
     #drama_weight = 0
     drama_weight = 0
-    causalityWeight = 3
+    causalityWeight = 5
     #causalityWeight = 0
 
     if currWorldState.characters:

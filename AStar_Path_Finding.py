@@ -66,7 +66,7 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
                 continue
 
             # Calculate the cost to reach the neighbor node
-            new_cost = current_node.cost + 1
+            new_cost = current_node.cost + 5
 
             # Check if the neighbor is already in the open set
             neighbor_node = next((node for _, node in open_set if node.state == neighbor_state), None)
@@ -102,5 +102,5 @@ initWorldState, waypoints = SciFiwaypointTestEnvironmentAlt()
 start_state = initWorldState
 goal_state = waypoints[0]
 path = astar_search(start_state, goal_state, get_neighbors, heuristic, NoRestaurantPossibleEvents)
-for 
+print(path[0].state.eventHistory)
 print(path)

@@ -241,7 +241,7 @@ class PlotFragment:
         for env in environment:
             envStr += env.name
 
-        updated_state.event_history.append((type(self), charStr, envStr))
+        updated_state.event_history.append((type(self), charStr, envStr, characters, environment))
         return updated_state
     
     def withinInstanceLimit(self, worldstate, characters, environment, repeat_limit):
