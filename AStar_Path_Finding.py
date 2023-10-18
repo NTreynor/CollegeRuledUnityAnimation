@@ -120,4 +120,5 @@ initWorldState, waypoints = SciFiwaypointTestEnvironmentAlt()
 start_state = initWorldState
 goal_state = waypoints[0]
 path = astar_search(start_state, goal_state, get_neighbors, heuristic, NoRestaurantPossibleEvents)
+# TODO: Implement waypoint chaining
 print(path)
