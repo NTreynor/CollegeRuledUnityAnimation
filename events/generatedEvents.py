@@ -6,7 +6,7 @@ import random
 
 class BreakingPointDuel(PlotFragment):
     def __init__(self):
-        self.drama = 15  # Higher drama score for an intense event
+        self.drama = -15  # Higher negative drama score for an intense event & final resolution
 
     def checkPreconditions(self, worldstate):
         valid_characters = []
@@ -272,7 +272,7 @@ class IrritateMild(PlotFragment):
 
 class IrritateIncreasing(PlotFragment):
     def __init__(self):
-        self.drama = 6
+        self.drama = 9
 
     def checkPreconditions(self, worldstate):
         valid_characters = []
@@ -315,7 +315,7 @@ class IrritateIncreasing(PlotFragment):
 
 class IrritateStrong(PlotFragment):
     def __init__(self):
-        self.drama = 6
+        self.drama = 12
 
     def checkPreconditions(self, worldstate):
         valid_characters = []

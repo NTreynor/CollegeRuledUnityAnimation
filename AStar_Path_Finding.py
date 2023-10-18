@@ -33,6 +33,20 @@ class Node:
     def __gt__(self, other):
         return (self.total_cost() > other.total_cost(other))
 
+def print_story(path):
+    path.reverse()
+    storyLength = len(path)
+    startState = path[0]
+    for i in range(storyLength-1):
+        PriorState = path[i]
+        CurrentState = path[i+1]
+        EventTuple = CurrentState.event_history[i]
+        EventType = EventTuple[0]
+        eventCharacters = EventTuple[3]
+        eventEnvironments = EventTuple[4]
+        eventInstance = EventType()
+        eventInstance.doEvent(worldstate=PriorState, characters=eventCharacters, environment=eventEnvironments)
+
 def astar_search(start_state, goal_state, get_neighbors, heuristic, events, depthLimit = 15):
     open_set = []  # Priority queue for nodes to be evaluated
     closed_set = set()  # Set to keep track of visited nodes
@@ -51,13 +65,17 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
         print(distanceToTarget)
         if distanceToTarget < 100:
             print(distanceToTarget)
-        if distanceToTarget < 20:
+        if distanceToTarget < 65:
             # Found the goal, reconstruct the path
             path = []
             while current_node:
                 path.append(current_node.state)
                 current_node = current_node.parent
-            return list(reversed(path))
+
+
+            # Completed story should be formed. Now we wish to print it.
+            print_story(list(path))
+            return list(path)
 
         closed_set.add(current_node.state)
 
@@ -102,5 +120,4 @@ initWorldState, waypoints = SciFiwaypointTestEnvironmentAlt()
 start_state = initWorldState
 goal_state = waypoints[0]
 path = astar_search(start_state, goal_state, get_neighbors, heuristic, NoRestaurantPossibleEvents)
-print(path[0].state.eventHistory)
 print(path)
