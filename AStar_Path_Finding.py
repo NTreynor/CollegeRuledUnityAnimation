@@ -34,7 +34,6 @@ class Node:
         return (self.total_cost() > other.total_cost(other))
 
 def print_story(path):
-    path.reverse()
     storyLength = len(path)
     startState = path[0]
     for i in range(storyLength-1):
@@ -74,8 +73,9 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
 
 
             # Completed story should be formed. Now we wish to print it.
-            print_story(list(path))
-            return list(path)
+            properPath = list(path).reverse()
+            print_story(properPath)
+            return properPath
 
         closed_set.add(current_node.state)
 
@@ -110,6 +110,16 @@ def get_neighbors(state, possible_events, depthLimit):
 def heuristic(state, goal_state):
     return distanceBetweenWorldstates(state, goal_state)
 
+def chained_astar_search(start_state, waypoints, get_neighbors, heuristic, events, depthLimit = 15):
+    FinalPath = []
+    InitialState = start_state
+    for waypoint in waypoints:
+        pathChunk = astar_search(InitialState, waypoint, get_neighbors, heuristic, events, depthLimit)
+        FinalPath += pathChunk
+        InitialState = pathChunk[len(pathChunk) - 1]
+    print_story(FinalPath)
+
+
 
 NoRestaurantPossibleEvents = [CoffeeSpill(), DoNothing(), ThrowDrink(), Befriend(), HitOnAccepted(), HitOnRejected(), BefriendModerate(), BefriendSlight(), BefriendStrong(), IrritateStrong(), IrritateMild(), IrritateIncreasing(), BreakingPoint(), BreakingPointDuel(), MildIntentionalAnnoyance(), ModerateIntentionalAnnoyance(), SevereIntentionalAnnoyance(), MildIgnorantAnnoyance(), ModerateIgnorantAnnoyance(), SevereIgnorantAnnoyance(), FallInLove(), AskOnDate(), HitBySpaceCar(), GetMiningJob(),
                       GetSpaceShuttleJob(), GoToSpaceJail(), SoloJailbreak(), CoffeeSpill(),
@@ -119,6 +129,7 @@ NoRestaurantPossibleEvents = [CoffeeSpill(), DoNothing(), ThrowDrink(), Befriend
 initWorldState, waypoints = SciFiwaypointTestEnvironmentAlt()
 start_state = initWorldState
 goal_state = waypoints[0]
-path = astar_search(start_state, goal_state, get_neighbors, heuristic, NoRestaurantPossibleEvents)
+#path = astar_search(start_state, goal_state, get_neighbors, heuristic, NoRestaurantPossibleEvents)
+path2 = chained_astar_search(start_state, waypoints, get_neighbors, heuristic, NoRestaurantPossibleEvents)
 # TODO: Implement waypoint chaining
-print(path)
+print(path2)
