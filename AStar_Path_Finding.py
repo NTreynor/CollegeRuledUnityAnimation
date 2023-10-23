@@ -64,7 +64,7 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
         print(distanceToTarget)
         if distanceToTarget < 100:
             print(distanceToTarget)
-        if distanceToTarget < 65:
+        if distanceToTarget < 75:
             # Found the goal, reconstruct the path
             path = []
             while current_node:
@@ -73,9 +73,10 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
 
 
             # Completed story should be formed. Now we wish to print it.
-            properPath = list(path).reverse()
-            print_story(properPath)
-            return properPath
+            path = list(path)
+            path.reverse()
+            #print_story(path)
+            return path
 
         closed_set.add(current_node.state)
 
@@ -111,13 +112,34 @@ def heuristic(state, goal_state):
     return distanceBetweenWorldstates(state, goal_state)
 
 def chained_astar_search(start_state, waypoints, get_neighbors, heuristic, events, depthLimit = 15):
-    FinalPath = []
     InitialState = start_state
-    for waypoint in waypoints:
-        pathChunk = astar_search(InitialState, waypoint, get_neighbors, heuristic, events, depthLimit)
-        FinalPath += pathChunk
-        InitialState = pathChunk[len(pathChunk) - 1]
+
+    waypoint = waypoints[0]
+    pathChunk = astar_search(InitialState, waypoint, get_neighbors, heuristic, events, depthLimit)
+    FinalPath = pathChunk
+    SecondState = pathChunk[len(pathChunk) - 1]
+    depthLimit -= len(pathChunk)
+    waypoint = waypoints[1]
+    pathChunk2 = astar_search(SecondState, waypoint, get_neighbors, heuristic, events, depthLimit)
+    skip = True
+    for i in pathChunk2:
+        if skip:
+            skip = False
+        else:
+            FinalPath.append(i)
+    print(len(FinalPath))
+    print(len(pathChunk2))
+    print(len(pathChunk))
+    InitialState = pathChunk[len(pathChunk) - 1]
+    depthLimit -= len(pathChunk)
+
+
+
+
+
+    #import pdb; pdb.set_trace()
     print_story(FinalPath)
+
 
 
 
@@ -126,7 +148,7 @@ NoRestaurantPossibleEvents = [CoffeeSpill(), DoNothing(), ThrowDrink(), Befriend
                       HospitalVisit(), Cheat(), Steal(), Irritate(), Befriend(), LoseJob(),
                       AssistedJailBreak(), SabotagedJailBreak(), DoNothing(), GetRejectedFromJob()]
 
-initWorldState, waypoints = SciFiwaypointTestEnvironmentAlt()
+initWorldState, waypoints = SciFiwaypointTestEnvironment()
 start_state = initWorldState
 goal_state = waypoints[0]
 #path = astar_search(start_state, goal_state, get_neighbors, heuristic, NoRestaurantPossibleEvents)
