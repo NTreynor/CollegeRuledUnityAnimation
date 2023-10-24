@@ -114,31 +114,26 @@ def heuristic(state, goal_state):
 def chained_astar_search(start_state, waypoints, get_neighbors, heuristic, events, depthLimit = 15):
     InitialState = start_state
 
-    waypoint = waypoints[0]
-    pathChunk = astar_search(InitialState, waypoint, get_neighbors, heuristic, events, depthLimit)
-    FinalPath = pathChunk
-    SecondState = pathChunk[len(pathChunk) - 1]
-    depthLimit -= len(pathChunk)
-    waypoint = waypoints[1]
-    pathChunk2 = astar_search(SecondState, waypoint, get_neighbors, heuristic, events, depthLimit)
-    skip = True
-    for i in pathChunk2:
-        if skip:
-            skip = False
+    FinalPath = []
+    InitialState = start_state
+    firstPath = True
+    for waypoint in waypoints:
+        pathChunk = astar_search(InitialState, waypoint, get_neighbors, heuristic, events, depthLimit)
+        if firstPath:
+            FinalPath = pathChunk
+            firstPath = False
         else:
-            FinalPath.append(i)
+            skip = True
+            for i in pathChunk:
+                if skip:
+                    skip = False
+                else:
+                    FinalPath.append(i)
+        InitialState = pathChunk[len(pathChunk) - 1]
+        depthLimit -= len(pathChunk)
     print(len(FinalPath))
-    print(len(pathChunk2))
-    print(len(pathChunk))
-    InitialState = pathChunk[len(pathChunk) - 1]
-    depthLimit -= len(pathChunk)
-
-
-
-
-
-    #import pdb; pdb.set_trace()
     print_story(FinalPath)
+    return FinalPath
 
 
 
