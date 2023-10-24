@@ -57,18 +57,31 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
     #drama_weight = 0
     drama_weight = 0
     causalityWeight = 5
+    deadCharacterPenalty = 500
     #causalityWeight = 0
 
     if currWorldState.characters:
         for character in currWorldState.characters:
             for future_character in newWorldState.characters:
                 if future_character.name == character.name:
+                    charFound = True
                     distanceBetweenVersions = character.getDistanceToFutureState(future_character.getAttributes())
                     distance += distanceBetweenVersions
 
-    if len(currWorldState.characters) != len(newWorldState.characters):
-        deadCharacterPenalty = abs(len(currWorldState.characters)-len(newWorldState.characters)) * 150 # Change this value to change weight of undesired deaths.
-        distance += deadCharacterPenalty
+
+    #TODO: Ensure this penalizes the deaths of characters *not* intended to be dead! Not simply checking length.
+
+    for future_character in newWorldState.characters:
+        charFound = False
+        for character in currWorldState.characters:
+            if future_character.name == character.name:
+                charFound = True
+        if charFound == False:
+            distance += deadCharacterPenalty
+
+    #if len(currWorldState.characters) != len(newWorldState.characters):
+        #deadCharacterPenalty = abs(len(currWorldState.characters)-len(newWorldState.characters)) * 150 # Change this value to change weight of undesired deaths.
+        #distance += deadCharacterPenalty
 
     causalityScore = determineCausalityScore(currWorldState)
     if causalityScore != 0:

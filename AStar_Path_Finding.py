@@ -64,7 +64,7 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
         print(distanceToTarget)
         if distanceToTarget < 100:
             print(distanceToTarget)
-        if distanceToTarget < 75:
+        if distanceToTarget < 25:
             # Found the goal, reconstruct the path
             path = []
             while current_node:
