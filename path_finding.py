@@ -68,9 +68,6 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
                     distanceBetweenVersions = character.getDistanceToFutureState(future_character.getAttributes())
                     distance += distanceBetweenVersions
 
-
-    #TODO: Ensure this penalizes the deaths of characters *not* intended to be dead! Not simply checking length.
-
     for future_character in newWorldState.characters:
         charFound = False
         for character in currWorldState.characters:
