@@ -24,6 +24,7 @@ class VentThroughAirlock(PlotFragment):
         if print_event:
             print("{} pushes {} out of the airlock.".format(characters[0].name, characters[1].name))
         reachable_worldstate.characters[worldstate.characters.index(characters[1])].location = reachable_worldstate.environments[worldstate.environments.index(environment)] #Change this in the future, environment is a copy (bc deepcopy)
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
@@ -63,6 +64,7 @@ class Steal(PlotFragment):
         thief.updateHappiness(4)
         victim.updateHappiness(-4)
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
@@ -97,6 +99,7 @@ class GoToSpaceJail(PlotFragment):
         self.sendCharacterToJail(char, reachable_worldstate)
         char.in_jail = True
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
         
     def sendCharacterToJail(self, character, worldstate):
@@ -140,6 +143,7 @@ class SoloJailbreak(PlotFragment):
         char.in_jail = False
         char.fugitive = True
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
@@ -179,6 +183,7 @@ class AssistedJailBreak(PlotFragment):
         char2.fugitive = True
         char.updateRelationship(char2, 50)
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
@@ -215,4 +220,5 @@ class SabotagedJailBreak(PlotFragment):
         char.updateRelationship(char2, -50)
         char2.updateRelationship(char, -25)
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)

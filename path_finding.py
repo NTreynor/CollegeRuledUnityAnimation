@@ -55,6 +55,8 @@ def determineDramaCurveDistance(currWorldState):
     distance = 0
     #TODO: Implement function that takes in a worldstate, looks back along the curve and drama values, and sums the
     # distance from each individual worldstate in the history to the target value at that index.
+    dramaTargets = currWorldState.drama_curve.drama_targets
+
 
 def distanceBetweenWorldstates(currWorldState, newWorldState):
     distance = 0
@@ -85,6 +87,8 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
         #distance += deadCharacterPenalty
 
     causalityScore = determineCausalityScore(currWorldState)
+    if causalityScore > 0:
+        print(str(causalityScore) + " -- Reduced")
     if causalityScore != 0:
         distance -= causalityScore * causalityWeight
 

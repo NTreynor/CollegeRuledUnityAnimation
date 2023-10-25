@@ -39,6 +39,7 @@ class FallInLove(PlotFragment):
         char_two = reachable_worldstate.characters[char_two_index]
         char_one.updateRelationship(char_two, 25)
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
@@ -82,6 +83,7 @@ class Befriend(PlotFragment):
         char_one.updateRelationship(char_two, 10)
         char_two.updateRelationship(char_one, 10)
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
@@ -120,6 +122,7 @@ class Irritate(PlotFragment):
         char_two = reachable_worldstate.characters[char_two_index]
         char_two.updateRelationship(char_one, -5)
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
@@ -164,6 +167,7 @@ class AskOnDate(PlotFragment):
         char_one.relationships[char_two] -= 5
         char_two.relationships[char_one] += 10
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
     
     def goOnDate(self, worldstate, characters, environment, print_event):
@@ -180,6 +184,7 @@ class AskOnDate(PlotFragment):
         char_one.romantic_partner = char_two
         char_two.romantic_partner = char_one
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
@@ -237,6 +242,7 @@ class Cheat(PlotFragment):
         prev_partner.relationships[char_one] -= 30
         prev_partner.updateHappiness(-5)
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
         

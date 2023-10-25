@@ -145,7 +145,7 @@ NoRestaurantPossibleEvents = [CoffeeSpill(), DoNothing(), ThrowDrink(), Befriend
                       HospitalVisit(), Cheat(), Steal(), Irritate(), Befriend(), LoseJob(),
                       AssistedJailBreak(), SabotagedJailBreak(), DoNothing(), GetRejectedFromJob()]
 
-initWorldState, waypoints = SciFiwaypointTestEnvironment()
+initWorldState, waypoints = SciFiwaypointTestEnvironmentAlt()
 start_state = initWorldState
 goal_state = waypoints[0]
 #path = astar_search(start_state, goal_state, get_neighbors, heuristic, NoRestaurantPossibleEvents)

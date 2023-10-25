@@ -54,7 +54,7 @@ class HitBySpaceCar(PlotFragment):
         reachable_worldstate.drama_score += self.drama
         #print("New drama:")
         #print(reachable_worldstate.drama_score)
-
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
@@ -84,4 +84,5 @@ class HospitalVisit(PlotFragment):
         if print_event:
             print("{} goes to the hospital to recover their health.".format(char.name))
         reachable_worldstate.drama_score += self.drama
+        reachable_worldstate.prior_worldstate = worldstate
         return self.updateEventHistory(reachable_worldstate, characters, environment)
