@@ -76,7 +76,8 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
             path = list(path)
             path.reverse()
             #print_story(path)
-            return path
+            ExaminedWorldstates = len(open_set) + len(closed_set)
+            return path, ExaminedWorldstates
 
         closed_set.add(current_node.state)
 
@@ -113,12 +114,13 @@ def heuristic(state, goal_state):
 
 def chained_astar_search(start_state, waypoints, get_neighbors, heuristic, events, depthLimit = 15):
     InitialState = start_state
-
+    TotalWorldstatesVisited = 0
     FinalPath = []
     InitialState = start_state
     firstPath = True
     for waypoint in waypoints:
-        pathChunk = astar_search(InitialState, waypoint, get_neighbors, heuristic, events, depthLimit)
+        pathChunk, ExaminedStates = astar_search(InitialState, waypoint, get_neighbors, heuristic, events, depthLimit)
+        TotalWorldstatesVisited += ExaminedStates
         if firstPath:
             FinalPath = pathChunk
             firstPath = False
@@ -133,7 +135,7 @@ def chained_astar_search(start_state, waypoints, get_neighbors, heuristic, event
         depthLimit -= len(pathChunk)
     print(len(FinalPath))
     print_story(FinalPath)
-    return FinalPath
+    return FinalPath, ExaminedStates
 
 
 
@@ -147,6 +149,6 @@ initWorldState, waypoints = SciFiwaypointTestEnvironment()
 start_state = initWorldState
 goal_state = waypoints[0]
 #path = astar_search(start_state, goal_state, get_neighbors, heuristic, NoRestaurantPossibleEvents)
-path2 = chained_astar_search(start_state, waypoints, get_neighbors, heuristic, NoRestaurantPossibleEvents)
-# TODO: Implement waypoint chaining
+path2, VisitedStates = chained_astar_search(start_state, waypoints, get_neighbors, heuristic, NoRestaurantPossibleEvents)
 print(path2)
+print(VisitedStates)

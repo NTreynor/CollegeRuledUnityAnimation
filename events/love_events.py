@@ -185,7 +185,7 @@ class AskOnDate(PlotFragment):
 
 class Cheat(PlotFragment):
     def __init__(self):
-        self.drama = 17
+        self.drama = 19
     
     def checkPreconditions(self, worldstate):
         valid_characters = []
@@ -207,17 +207,36 @@ class Cheat(PlotFragment):
     def doEvent(self, worldstate, characters, environment, print_event=True):
         prev_partner_idx = worldstate.characters.index(characters[0].romantic_partner)
         cheater_idx = worldstate.characters.index(characters[0])
-        new_state = AskOnDate().doEvent(worldstate, characters, environment, print_event)
-        cheater = new_state.characters[cheater_idx]
-        prev_partner = new_state.characters[prev_partner_idx]
+        reachable_worldstate = copy.deepcopy(worldstate)
+        reachable_worldstate.index += 1
+        char_one_index = worldstate.characters.index(characters[0])
+        char_two_index = worldstate.characters.index(characters[1])
+        char_one = reachable_worldstate.characters[char_one_index] # Cheater
+        char_two = reachable_worldstate.characters[char_two_index] # Homewrecker
+        prev_partner = reachable_worldstate.characters[prev_partner_idx] # Victim
         if print_event:
-            print("{} finds out what {} did and is devastated. They break up with {}.".format(prev_partner.name, cheater.name, cheater.name))
-        if cheater.romantic_partner == prev_partner:
-            cheater.romantic_partner = False
+            print("{} asks {} to go on a picnic with them at the Rocket Wreck Hills. Their heart is racing.".format(characters[0].name, characters[1].name))
+        if characters[1].relationships[characters[0]] < 50 or (characters[1].romantic_partner != None and characters[1].romantic_partner != False):
+            if print_event:
+                print("{} declines {}'s invitation.".format(char_two.name, char_one.name))
+            char_one.relationships[char_two] -= 5
+            char_two.relationships[char_one] += 10
+        else:
+            if print_event:
+                print(
+                    "{} blushes and says they would love to go on a date with {}.".format(char_two.name, char_one.name))
+            char_one.relationships[char_two] += 20
+            char_two.relationships[char_one] += 30
+            char_one.romantic_partner = char_two
+            char_two.romantic_partner = char_one
+        if print_event:
+            print("{} finds out what {} did and is devastated. They break up with {}.".format(prev_partner.name, char_one.name, char_one.name))
+        if char_one.romantic_partner == prev_partner:
+            char_one.romantic_partner = False
         prev_partner.romantic_partner = False
-        prev_partner.relationships[cheater] -= 30
+        prev_partner.relationships[char_one] -= 30
         prev_partner.updateHappiness(-5)
-        new_state.drama_score += self.drama
-        return self.updateEventHistory(new_state, characters, environment)
+        reachable_worldstate.drama_score += self.drama
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
 
         

@@ -312,16 +312,17 @@ def SciFiwaypointTestEnvironment():
     wp_2_worldstate.drama_score = 15
 
     #wp_jess = Character("Jess", health=None, happiness=None, location=wp_serenity, romantic_partner=None)
-    wp_mal.updateRelationship(wp_jess, -30)
+    wp_mal.updateRelationship(wp_jess, -90)
+    wp_jess.updateRelationship(wp_mal, -90)
     wp_inara.relationships.pop(wp_jess)
     wp_mal.updateRelationship(wp_inara, 30)
     wp_inara.updateRelationship(wp_mal, 45)
     wp_mal.romantic_partner = wp_inara
     wp_inara.romantic_partner = wp_mal
-    wp_inara.fugitive = True
-    wp_inara.murderer = True
-    wp_mal.has_job = True
-    wp_chars = [wp_mal, wp_inara]
+    wp_jess.romantic_partner = None
+    #wp_inara.fugitive = True
+    #wp_mal.has_job = True
+    wp_chars = [wp_mal, wp_inara, wp_jess]
 
 
     wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 40, testCurve)

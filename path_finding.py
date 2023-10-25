@@ -51,6 +51,10 @@ def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_event
 
         return random.choice(equallyValubleIndexes), currEventMinDistance
 
+def determineDramaCurveDistance(currWorldState):
+    distance = 0
+    #TODO: Implement function that takes in a worldstate, looks back along the curve and drama values, and sums the
+    # distance from each individual worldstate in the history to the target value at that index.
 
 def distanceBetweenWorldstates(currWorldState, newWorldState):
     distance = 0
