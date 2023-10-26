@@ -62,7 +62,7 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
     distance = 0
     #drama_weight = 0
     drama_weight = 0
-    causalityWeight = 5
+    causalityWeight = 10
     deadCharacterPenalty = 500
     #causalityWeight = 0
 
@@ -86,8 +86,9 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
         #deadCharacterPenalty = abs(len(currWorldState.characters)-len(newWorldState.characters)) * 150 # Change this value to change weight of undesired deaths.
         #distance += deadCharacterPenalty
 
-    causalityScore = determineCausalityScore(currWorldState)
-    if causalityScore > 0:
+    determineCausalityScore(currWorldState)
+    causalityScore = currWorldState.totalCausalScore
+    if causalityScore > 1:
         print(str(causalityScore) + " -- Reduced")
     if causalityScore != 0:
         distance -= causalityScore * causalityWeight
@@ -134,9 +135,12 @@ def determineCausalityScore(currWorldState):
     if oldPossibleEvents:
         if lastEventString in oldPossibleEvents:
             #print("non-casual event.")
+            currWorldState.causal = 0
             return 0
         else:
             #print("causal event.")
+            currWorldState.causal = 1
+            currWorldState.totalCausalScore = prior.totalCausalScore + 1
             return 1
     return 0
 

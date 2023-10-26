@@ -64,7 +64,7 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
         print(distanceToTarget)
         if distanceToTarget < 100:
             print(distanceToTarget)
-        if distanceToTarget < 25:
+        if distanceToTarget < 0:
             # Found the goal, reconstruct the path
             path = []
             while current_node:
@@ -107,6 +107,7 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
     return []
 
 def get_neighbors(state, possible_events, depthLimit):
+    state.getRunableEvents(possible_events)
     return getReachableWorldstates(state, possible_events, depthLimit)
 
 def heuristic(state, goal_state):
@@ -145,7 +146,7 @@ NoRestaurantPossibleEvents = [CoffeeSpill(), DoNothing(), ThrowDrink(), Befriend
                       HospitalVisit(), Cheat(), Steal(), Irritate(), Befriend(), LoseJob(),
                       AssistedJailBreak(), SabotagedJailBreak(), DoNothing(), GetRejectedFromJob()]
 
-initWorldState, waypoints = SciFiwaypointTestEnvironmentAlt()
+initWorldState, waypoints = SciFiwaypointTestEnvironment()
 start_state = initWorldState
 goal_state = waypoints[0]
 #path = astar_search(start_state, goal_state, get_neighbors, heuristic, NoRestaurantPossibleEvents)

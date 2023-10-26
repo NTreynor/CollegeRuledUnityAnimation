@@ -162,6 +162,8 @@ class WorldState:
         self.prior_worldstate = None
         self.radius = radius
         self.drama_curve = desiredDramaCurve
+        self.causal = 0
+        self.totalCausalScore = 0
     
     def removeCharacter(self, character):
         for other_character in self.characters:
@@ -207,8 +209,8 @@ class WorldState:
         eventTextList = []
         for event in runable_events:
             eventStr = str(type(event[0]))
-            charsStr = ",".join(str(x.name) for x in event[2])
-            envStr = ",".join(str(x.name) for x in event[3])
+            charsStr = "".join(str(x.name) for x in event[2])
+            envStr = "".join(str(x.name) for x in event[3])
             eventString = eventStr+charsStr+envStr
             eventTextList.append(eventString)
         return eventTextList

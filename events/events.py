@@ -172,8 +172,9 @@ class CoffeeSpill(PlotFragment):
         for character in worldstate.characters:
             for character2 in character.relationships:
                 if character.sameLoc(character2):
-                    valid_characters.append([character, character2])
-                    environments.append([])
+                    if character != character2:
+                        valid_characters.append([character, character2])
+                        environments.append([])
 
         if valid_characters:
             return True, valid_characters, environments

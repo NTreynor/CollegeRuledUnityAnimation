@@ -1,9 +1,6 @@
-Jess, Approach_Mal
-Jess, Chat_Mal
-Mal, React_Positive
 Mal, Approach_Jess
 Mal, Chat_Jess
 Jess, React_Positive
-Jess, Approach_Mal
-Jess, Chat_Mal
-Mal, React_Positive
+Mal, Approach_Jess
+Mal, Chat_Jess
+Jess, React_Positive
