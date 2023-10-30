@@ -6,7 +6,7 @@ import random
 
 class BreakingPointDuel(PlotFragment):
     def __init__(self):
-        self.drama = -15  # Higher negative drama score for an intense event & final resolution
+        self.drama = -20  # Higher negative drama score for an intense event & final resolution
 
     def checkPreconditions(self, worldstate):
         valid_characters = []

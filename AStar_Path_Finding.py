@@ -104,7 +104,9 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
                 RandomPopHeapQ.heappush(open_set, (neighbor_node.total_cost(), neighbor_node))
 
     # If no path is found, return an empty list
-    return []
+    print("No path found!")
+    ExaminedWorldstates = len(open_set) + len(closed_set)
+    return [ExaminedWorldstates]
 
 def get_neighbors(state, possible_events, depthLimit):
     state.getRunableEvents(possible_events)

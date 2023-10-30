@@ -88,8 +88,8 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
 
     determineCausalityScore(currWorldState)
     causalityScore = currWorldState.totalCausalScore
-    if causalityScore > 1:
-        print(str(causalityScore) + " -- Reduced")
+    #if causalityScore > 1:
+        #print(str(causalityScore) + " -- Reduced")
     if causalityScore != 0:
         distance -= causalityScore * causalityWeight
 

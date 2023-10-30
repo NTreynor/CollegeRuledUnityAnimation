@@ -40,7 +40,7 @@ class GetMiningJob(PlotFragment):
     def checkPreconditions(self, worldstate):
         valid_characters = []
         environments = []
-        if not self.withinRepeatLimit(worldstate, 5):
+        if not self.withinRepeatLimit(worldstate, 2):
             return False, None, environments
         for character in worldstate.characters:
             if not (character.has_job or character.fugitive):
