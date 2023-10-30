@@ -4,3 +4,6 @@ Jess, React_Negative
 Mal, Approach_Jess
 Mal, Chat_Jess
 Jess, React_Negative
+Mal, Approach_Jess
+Mal, Chat_Jess
+Jess, React_Positive
