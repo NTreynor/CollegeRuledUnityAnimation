@@ -77,6 +77,7 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
             path.reverse()
             #print_story(path)
             ExaminedWorldstates = len(open_set) + len(closed_set)
+            print("Waypoint Hit!")
             return path, ExaminedWorldstates
 
         closed_set.add(current_node.state)

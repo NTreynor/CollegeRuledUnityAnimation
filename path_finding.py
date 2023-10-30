@@ -57,14 +57,33 @@ def determineDramaCurveDistance(currWorldState):
     # distance from each individual worldstate in the history to the target value at that index.
     dramaTargets = currWorldState.drama_curve.drama_targets
 
+    #print("Is this being called??")
+    # First step is to assemble the current drama scores
+    steps = len(currWorldState.event_history)
+    currDramaScores = []
+    currDramaScores.append(currWorldState.drama_score) # Grab first value
+    priorWS = currWorldState.prior_worldstate
+    while priorWS: #Recursively parse down the prior states and grab their drama scores
+        currDramaScores.append(priorWS.drama_score)
+        priorWS = priorWS.prior_worldstate
+    dramaPath = list(currDramaScores)
+    dramaPath.reverse()
+    totalDistance = 0
+    #print(dramaPath)
+    for i in range(steps):
+        target = currWorldState.drama_curve.drama_targets[i]
+        actual = dramaPath[i+1]
+        totalDistance += round(abs(target-actual)) # Sum the distances between targets and actual values at each point
+    return totalDistance
+
+
+
 
 def distanceBetweenWorldstates(currWorldState, newWorldState):
     distance = 0
-    #drama_weight = 0
-    drama_weight = 0
+    drama_weight = 1
     causalityWeight = 10
     deadCharacterPenalty = 500
-    #causalityWeight = 0
 
     if currWorldState.characters:
         for character in currWorldState.characters:
@@ -94,21 +113,17 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
         distance -= causalityScore * causalityWeight
 
     # Drama scores using drama curve methodology
-    if newWorldState.getDramaCurve() != None:
-        #print("DramaCurveTargetFound")
-        plotSteps = len(currWorldState.event_history)
-        #print(plotSteps)
-        dramaTarget = newWorldState.getDramaCurve().getDramaTargets()[plotSteps]
-        drama_distance = abs(currWorldState.drama_score - dramaTarget) * drama_weight
-        distance += drama_distance
-        #print(drama_distance)
+    if currWorldState.getDramaCurve() != None:
+        drama_distance = determineDramaCurveDistance(currWorldState)
+        weightedDramaDistance = drama_distance * drama_weight
+        distance += weightedDramaDistance
         return distance
 
     # Drama scoring using arbitrary assigned target for a waypoint
-    if newWorldState.drama_score != None:
-        #drama_distance = abs(currWorldState.drama_score - newWorldState.drama_score) * 5/2
+    if currWorldState.drama_score != None:
         drama_distance = abs(currWorldState.drama_score - newWorldState.drama_score) * drama_weight
-        distance += drama_distance
+        weightedDramaDistance = drama_distance * drama_weight
+        distance += weightedDramaDistance
         #print(drama_distance)
     return distance
 

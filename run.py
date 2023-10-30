@@ -315,6 +315,7 @@ def SciFiwaypointTestEnvironment():
     wp_mal.relationships.pop(wp_jess)
     wp_jess.updateRelationship(wp_mal, -120)
     wp_inara.relationships.pop(wp_jess)
+    wp_jess.relationships.pop(wp_inara)
     wp_mal.updateRelationship(wp_inara, 40)
     wp_inara.updateRelationship(wp_mal, 55)
     wp_mal.romantic_partner = wp_inara
