@@ -74,6 +74,8 @@ def determineDramaCurveDistance(currWorldState):
         target = currWorldState.drama_curve.drama_targets[i]
         actual = dramaPath[i+1]
         totalDistance += round(abs(target-actual)) # Sum the distances between targets and actual values at each point
+    #if totalDistance > 100:
+    #    print("debug!")
     return totalDistance
 
 
@@ -82,7 +84,7 @@ def determineDramaCurveDistance(currWorldState):
 def distanceBetweenWorldstates(currWorldState, newWorldState):
     distance = 0
     drama_weight = 1
-    causalityWeight = 10
+    causalityWeight = 25
     deadCharacterPenalty = 500
 
     if currWorldState.characters:
