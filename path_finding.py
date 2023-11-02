@@ -2,7 +2,7 @@ from backbone_classes import *
 from events.oldEvents import *
 import random
 
-from run import getRunableEvents
+from run import *
 
 
 def selectEventIndex(eventList, desiredWorldState):
@@ -51,43 +51,81 @@ def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_event
 
         return random.choice(equallyValubleIndexes), currEventMinDistance
 
+def determineDramaCurveDistance(currWorldState):
+    distance = 0
+    #TODO: Implement function that takes in a worldstate, looks back along the curve and drama values, and sums the
+    # distance from each individual worldstate in the history to the target value at that index.
+    dramaTargets = currWorldState.drama_curve.drama_targets
+
+    #print("Is this being called??")
+    # First step is to assemble the current drama scores
+    steps = len(currWorldState.event_history)
+    currDramaScores = []
+    currDramaScores.append(currWorldState.drama_score) # Grab first value
+    priorWS = currWorldState.prior_worldstate
+    while priorWS: #Recursively parse down the prior states and grab their drama scores
+        currDramaScores.append(priorWS.drama_score)
+        priorWS = priorWS.prior_worldstate
+    dramaPath = list(currDramaScores)
+    dramaPath.reverse()
+    totalDistance = 0
+    #print(dramaPath)
+    for i in range(steps):
+        target = currWorldState.drama_curve.drama_targets[i]
+        actual = dramaPath[i+1]
+        totalDistance += round(abs(target-actual)) # Sum the distances between targets and actual values at each point
+    #if totalDistance > 100:
+    #    print("debug!")
+    return totalDistance
+
+
+
 
 def distanceBetweenWorldstates(currWorldState, newWorldState):
     distance = 0
-    drama_weight = 2
-    causalityWeight = 1
+    drama_weight = 0.3
+    causalityWeight = 20
+    deadCharacterPenalty = 150
 
     if currWorldState.characters:
         for character in currWorldState.characters:
             for future_character in newWorldState.characters:
                 if future_character.name == character.name:
+                    charFound = True
                     distanceBetweenVersions = character.getDistanceToFutureState(future_character.getAttributes())
                     distance += distanceBetweenVersions
 
-    if len(currWorldState.characters) != len(newWorldState.characters):
-        deadCharacterPenalty = abs(len(currWorldState.characters)-len(newWorldState.characters)) * 50 # Change this value to change weight of undesired deaths.
-        distance += deadCharacterPenalty
+    for future_character in newWorldState.characters:
+        charFound = False
+        for character in currWorldState.characters:
+            if future_character.name == character.name:
+                charFound = True
+        if charFound == False:
+            distance += deadCharacterPenalty
 
-    causalityScore = determineCausalityScore(currWorldState)
+    #if len(currWorldState.characters) != len(newWorldState.characters):
+        #deadCharacterPenalty = abs(len(currWorldState.characters)-len(newWorldState.characters)) * 150 # Change this value to change weight of undesired deaths.
+        #distance += deadCharacterPenalty
+
+    determineCausalityScore(currWorldState)
+    causalityScore = currWorldState.totalCausalScore
+    #if causalityScore > 1:
+        #print(str(causalityScore) + " -- Reduced")
     if causalityScore != 0:
         distance -= causalityScore * causalityWeight
 
     # Drama scores using drama curve methodology
-    if newWorldState.getDramaCurve() != None:
-        #print("DramaCurveTargetFound")
-        plotSteps = len(currWorldState.event_history)
-        #print(plotSteps)
-        dramaTarget = newWorldState.getDramaCurve().getDramaTargets()[plotSteps]
-        drama_distance = abs(currWorldState.drama_score - dramaTarget) * drama_weight
-        distance += drama_distance
-        #print(drama_distance)
+    if currWorldState.getDramaCurve() != None:
+        drama_distance = determineDramaCurveDistance(currWorldState)
+        weightedDramaDistance = drama_distance * drama_weight
+        distance += weightedDramaDistance
         return distance
 
     # Drama scoring using arbitrary assigned target for a waypoint
-    if newWorldState.drama_score != None:
-        #drama_distance = abs(currWorldState.drama_score - newWorldState.drama_score) * 5/2
+    if currWorldState.drama_score != None:
         drama_distance = abs(currWorldState.drama_score - newWorldState.drama_score) * drama_weight
-        distance += drama_distance
+        weightedDramaDistance = drama_distance * drama_weight
+        distance += weightedDramaDistance
         #print(drama_distance)
     return distance
 
@@ -96,6 +134,8 @@ def determineCausalityScore(currWorldState):
     # (ie happen immediately after they become possible), we reduce the distance heuristic from that worldstate
     # to the target worldstate for the pourposes of pathfinding selection, but not for hitting waypoints.
     # We use each worldstate's stored event history for this, in this manner:
+    if len(currWorldState.event_history) == 0:
+        return 0
 
     lastEvent = currWorldState.event_history[-1 * 1:][0]
     eventStr = str(lastEvent[0])
@@ -112,8 +152,39 @@ def determineCausalityScore(currWorldState):
     if oldPossibleEvents:
         if lastEventString in oldPossibleEvents:
             #print("non-casual event.")
+            currWorldState.causal = 0
             return 0
         else:
             #print("causal event.")
+            currWorldState.causal = 1
+            currWorldState.totalCausalScore = prior.totalCausalScore + 1
             return 1
     return 0
+
+def getRunableEvents(current_worldstate, possible_events):
+    runableEvents = []
+    for event in possible_events: # Check to see if an instance of an event is runnable
+        preconditions_met, characters, environments = event.checkPreconditions(current_worldstate)
+        if preconditions_met: # If so, add all possible instances to the list of runnable events
+            for x in range(len(characters)):
+                runableEvents.append([event, current_worldstate, characters[x], environments[x]])
+    return runableEvents
+
+def getReachableWorldstates(current_worldstate, possible_events, depthlimit = 0):
+    if depthlimit == 0:
+        NeighborWorldstates = []
+        runableEvents = getRunableEvents(current_worldstate, possible_events)
+        for x in range (len(runableEvents)):
+            reachable_worldstate = runableEvents[x][0].getNewWorldState(runableEvents[x][1], runableEvents[x][2], runableEvents[x][3])
+            NeighborWorldstates.append(reachable_worldstate)
+        return NeighborWorldstates
+    else:
+        if len(current_worldstate.event_history) < depthlimit:
+            NeighborWorldstates = []
+            runableEvents = getRunableEvents(current_worldstate, possible_events)
+            for x in range(len(runableEvents)):
+                reachable_worldstate = runableEvents[x][0].getNewWorldState(runableEvents[x][1], runableEvents[x][2],
+                                                                            runableEvents[x][3])
+                NeighborWorldstates.append(reachable_worldstate)
+            return NeighborWorldstates
+        return []
