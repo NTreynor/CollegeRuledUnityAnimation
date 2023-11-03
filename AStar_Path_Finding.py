@@ -46,7 +46,7 @@ def print_story(path):
         eventInstance = EventType()
         eventInstance.doEvent(worldstate=PriorState, characters=eventCharacters, environment=eventEnvironments)
 
-def astar_search(start_state, goal_state, get_neighbors, heuristic, events, depthLimit = 15):
+def astar_search(start_state, goal_state, get_neighbors, heuristic, events, depthLimit = 15, alpha = 0.5):
     open_set = []  # Priority queue for nodes to be evaluated
     closed_set = set()  # Set to keep track of visited nodes
 
@@ -55,7 +55,7 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
     RandomPopHeapQ.heappush(open_set, (start_node.total_cost(), start_node))
 
     while open_set:
-        if random.random() < .5:
+        if random.random() < alpha:
             _, current_node = RandomPopHeapQ.heappop(open_set)
         else:
             _, current_node = RandomPopHeapQ.heaprandpop(open_set)
@@ -116,14 +116,14 @@ def get_neighbors(state, possible_events, depthLimit):
 def heuristic(state, goal_state):
     return distanceBetweenWorldstates(state, goal_state)
 
-def chained_astar_search(start_state, waypoints, get_neighbors, heuristic, events, depthLimit = 15):
+def chained_astar_search(start_state, waypoints, get_neighbors, heuristic, events, depthLimit = 15, alpha = 0.5):
     InitialState = start_state
     TotalWorldstatesVisited = 0
     FinalPath = []
     InitialState = start_state
     firstPath = True
     for waypoint in waypoints:
-        pathChunk, ExaminedStates = astar_search(InitialState, waypoint, get_neighbors, heuristic, events, depthLimit)
+        pathChunk, ExaminedStates = astar_search(InitialState, waypoint, get_neighbors, heuristic, events, depthLimit, alpha)
         TotalWorldstatesVisited += ExaminedStates
         if firstPath:
             FinalPath = pathChunk
@@ -141,9 +141,7 @@ def chained_astar_search(start_state, waypoints, get_neighbors, heuristic, event
     print_story(FinalPath)
     return FinalPath, ExaminedStates
 
-
-
-
+'''
 NoRestaurantPossibleEvents = [CoffeeSpill(), DoNothing(), ThrowDrink(), Befriend(), HitOnAccepted(), HitOnRejected(), BefriendModerate(), BefriendSlight(), BefriendStrong(), IrritateStrong(), IrritateMild(), IrritateIncreasing(), BreakingPoint(), BreakingPointDuel(), MildIntentionalAnnoyance(), ModerateIntentionalAnnoyance(), SevereIntentionalAnnoyance(), MildIgnorantAnnoyance(), ModerateIgnorantAnnoyance(), SevereIgnorantAnnoyance(), FallInLove(), AskOnDate(), HitBySpaceCar(), GetMiningJob(),
                       GetSpaceShuttleJob(), GoToSpaceJail(), SoloJailbreak(), CoffeeSpill(),
                       HospitalVisit(), Cheat(), Steal(), Irritate(), Befriend(), LoseJob(),
@@ -156,3 +154,4 @@ goal_state = waypoints[0]
 path2, VisitedStates = chained_astar_search(start_state, waypoints, get_neighbors, heuristic, NoRestaurantPossibleEvents)
 print(path2)
 print(VisitedStates)
+'''
