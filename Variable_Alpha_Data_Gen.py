@@ -37,18 +37,19 @@ if __name__ == "__main__":
 
 
     numStories = 10
-    alphaValues = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    alphaValues = [0.91, 0.92, 0.93, 0.94, 0.95, 0.96, 0.97, 0.98, 0.99]
     alphaValues.reverse()
     ## Leaving out 0 and 1.0 values as 1.0 is pure random exploration and 0 is going to get stuck in local minimum and take *forever* to resolve.
     for i in range (10):
         for alphaVal in alphaValues:
-            initWorldState, waypoints = SciFiwaypointTestEnvironment()
+            #initWorldState, waypoints = SciFiwaypointTestEnvironment()
+            initWorldState, waypoints = SciFiwaypointTestEnvironmentSimple()
             start_state = initWorldState
             storyPath, VisitedStates = chained_astar_search(start_state, waypoints, get_neighbors, heuristic,
                                                             NoRestaurantPossibleEvents, alpha=alphaVal)
             searchLength = [alphaVal, VisitedStates] # Alpha value, and length of search
             # Specify the existing CSV file name
-            csv_filename = "alpha+visitedStatesCorrected.csv"
+            csv_filename = "alpha+visitedStatesCorrectedSimple.csv"
             # Append the list to the existing CSV file
             with open(csv_filename, 'a', newline='') as csvfile:
                 csv_writer = csv.writer(csvfile)

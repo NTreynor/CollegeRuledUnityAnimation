@@ -1,0 +1,6 @@
+Jess, Approach_Inara
+Jess, Chat_Inara
+Inara, React_Positive
+Inara, Approach_Jess
+Inara, Chat_Jess
+Jess, React_Positive
