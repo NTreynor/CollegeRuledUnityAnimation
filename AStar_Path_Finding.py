@@ -139,7 +139,7 @@ def chained_astar_search(start_state, waypoints, get_neighbors, heuristic, event
         depthLimit -= len(pathChunk)
     print(len(FinalPath))
     print_story(FinalPath)
-    return FinalPath, ExaminedStates
+    return FinalPath, TotalWorldstatesVisited
 
 '''
 NoRestaurantPossibleEvents = [CoffeeSpill(), DoNothing(), ThrowDrink(), Befriend(), HitOnAccepted(), HitOnRejected(), BefriendModerate(), BefriendSlight(), BefriendStrong(), IrritateStrong(), IrritateMild(), IrritateIncreasing(), BreakingPoint(), BreakingPointDuel(), MildIntentionalAnnoyance(), ModerateIntentionalAnnoyance(), SevereIntentionalAnnoyance(), MildIgnorantAnnoyance(), ModerateIgnorantAnnoyance(), SevereIgnorantAnnoyance(), FallInLove(), AskOnDate(), HitBySpaceCar(), GetMiningJob(),

@@ -48,7 +48,7 @@ if __name__ == "__main__":
                                                             NoRestaurantPossibleEvents, alpha=alphaVal)
             searchLength = [alphaVal, VisitedStates] # Alpha value, and length of search
             # Specify the existing CSV file name
-            csv_filename = "alpha+visitedStates.csv"
+            csv_filename = "alpha+visitedStatesCorrected.csv"
             # Append the list to the existing CSV file
             with open(csv_filename, 'a', newline='') as csvfile:
                 csv_writer = csv.writer(csvfile)
