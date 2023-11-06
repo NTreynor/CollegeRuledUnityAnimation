@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
 
     numStories = 10
-    alphaValues = [0.91, 0.92, 0.93, 0.94, 0.95, 0.96, 0.97, 0.98, 0.99]
+    alphaValues = [1]
     alphaValues.reverse()
     ## Leaving out 0 and 1.0 values as 1.0 is pure random exploration and 0 is going to get stuck in local minimum and take *forever* to resolve.
     for i in range (10):
