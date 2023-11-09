@@ -54,6 +54,8 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
     start_node = Node(state=start_state, cost=0, heuristic=heuristic(start_state, goal_state))
     RandomPopHeapQ.heappush(open_set, (start_node.total_cost(), start_node))
 
+    minDistance = None
+
     while open_set:
         if random.random() < alpha:
             _, current_node = RandomPopHeapQ.heappop(open_set)
@@ -82,6 +84,26 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
 
         closed_set.add(current_node.state)
 
+        if not minDistance:
+            minDistance = distanceToTarget
+        if distanceToTarget < minDistance: # If we haven't found the desired path, but we are better than the current best route, store it in bestPath.
+            minDistance = distanceToTarget
+            bestPath = []
+            tempNode = current_node
+            while tempNode:
+                bestPath.append(tempNode.state)
+                tempNode = tempNode.parent
+                bestPath = list(bestPath)
+                bestPath.reverse()
+                #print("Best path stored.")
+                #print(bestPath)
+        ExaminedWorldstates = len(open_set) + len(closed_set)
+        if ExaminedWorldstates >= 20000: # If we haven't found the desired path, in a large number of iterations, store the best route found.
+            print("Loosening Constraints due to difficulty discovering path. Consider adjusting story waypoints.")
+            return bestPath, ExaminedWorldstates
+
+
+
         for neighbor_state in get_neighbors(current_node.state, events, depthLimit):
             if neighbor_state in closed_set:
                 continue
@@ -105,9 +127,9 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
                 RandomPopHeapQ.heappush(open_set, (neighbor_node.total_cost(), neighbor_node))
 
     # If no path is found, return an empty list
-    print("No path found!")
+    print("No path found! Returning closest path.")
     ExaminedWorldstates = len(open_set) + len(closed_set)
-    return [ExaminedWorldstates]
+    return [bestPath, ExaminedWorldstates]
 
 def get_neighbors(state, possible_events, depthLimit):
     state.getRunableEvents(possible_events)
