@@ -94,11 +94,13 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
                 bestPath.append(tempNode.state)
                 tempNode = tempNode.parent
                 bestPath = list(bestPath)
-                bestPath.reverse()
+                bestPath.sort(key=lambda x: len(x.event_history), reverse=False)
+                if len(bestPath) > 5:
+                    print("debug")
                 #print("Best path stored.")
                 #print(bestPath)
         ExaminedWorldstates = len(open_set) + len(closed_set)
-        if ExaminedWorldstates >= 20000: # If we haven't found the desired path, in a large number of iterations, store the best route found.
+        if ExaminedWorldstates >= 1000: # If we haven't found the desired path, in a large number of iterations, store the best route found.
             print("Loosening Constraints due to difficulty discovering path. Consider adjusting story waypoints.")
             return bestPath, ExaminedWorldstates
 
