@@ -83,8 +83,8 @@ def determineDramaCurveDistance(currWorldState):
 
 def distanceBetweenWorldstates(currWorldState, newWorldState):
     distance = 0
-    drama_weight = 0.3
-    causalityWeight = 17
+    drama_weight = 1
+    causalityWeight = 15
     deadCharacterPenalty = 150
 
     if currWorldState.characters:

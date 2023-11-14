@@ -52,7 +52,10 @@ if __name__ == "__main__":
             dramaVals.extend([0] * (15 - len(dramaVals)))
 
             # Specify the existing CSV file name
-            csv_filename = "dramaValues.csv"
+            ## Drama curve Initialization
+            #params = [[5.5, 8], [2.5, 13]]
+            #testCurve = DramaCurve(2, params, 16, 70)
+            csv_filename = "dramaValues_1_15_70.csv"
             # Append the list to the existing CSV file
             with open(csv_filename, 'a', newline='') as csvfile:
                 csv_writer = csv.writer(csvfile)
