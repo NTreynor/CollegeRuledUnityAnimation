@@ -409,7 +409,6 @@ def SciFiwaypointTestEnvironmentAlt():
     params = [[2.6, 6], [2, 13]]
     testCurve = DramaCurve(2, params, 16, 100)
 
-
     # Environment Initialization
     wp_serenity = Environment("Serenity", 25)
     wp_space = Environment("Space", -100)
@@ -470,7 +469,7 @@ if __name__ == "__main__":
         #initWorldState, waypoints = waypointTestEnvironmentDramatic()
         #initWorldState, waypoints = waypointTestEnvironment()
         initWorldState, waypoints = SciFiwaypointTestEnvironmentAlt()
-        dramaValuesInstance = runStory(initWorldState, NoRestaurantPossibleEvents, 15, waypoints, lookaheadDepth=2)
+        dramaValuesInstance = runStory(initWorldState, NoRestaurantPossibleEvents, 15, waypoints, lookaheadDepth=1)
         dramaValList.append(dramaValuesInstance)
         f.close()
 
