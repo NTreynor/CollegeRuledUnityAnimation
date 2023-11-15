@@ -36,7 +36,7 @@ if __name__ == "__main__":
                                   AssistedJailBreak(), SabotagedJailBreak(), DoNothing(), GetRejectedFromJob()]
 
 
-    numStories = 10
+    numStories = 30
     dramaValList = []
     for z in range(numStories):
         f = open("testStory.txt", "w")
@@ -55,7 +55,7 @@ if __name__ == "__main__":
             ## Drama curve Initialization
             #params = [[5.5, 8], [2.5, 13]]
             #testCurve = DramaCurve(2, params, 16, 70)
-            csv_filename = "dramaValues_1_15_70.csv"
+            csv_filename = "dramaValues_10_15_70.csv"
             # Append the list to the existing CSV file
             with open(csv_filename, 'a', newline='') as csvfile:
                 csv_writer = csv.writer(csvfile)
