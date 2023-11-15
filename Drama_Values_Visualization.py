@@ -83,7 +83,7 @@ if __name__ == "__main__":
     testCurve = DramaCurve(2, params, 16, 70)
     targets = testCurve.getDramaTargets()
 
-    csv_filename = 'dramaValues_1_15_70.csv'
+    csv_filename = 'dramaValues_1.5_15_70.csv'
     currDramaData = get_column_data(csv_filename)
     currDramaData = replaceZeroes(currDramaData)
     dramaBoxPlotData = analyze_each_column(csv_filename, False)
