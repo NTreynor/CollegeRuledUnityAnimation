@@ -86,7 +86,9 @@ if __name__ == "__main__":
     testCurve = DramaCurve(2, params, 16, 70)
     targets = testCurve.getDramaTargets()
 
-    csv_filename = 'dramaValues_0.4_15_70.csv'
+    #csv_filename = 'dramaValues_0.4_15_70_penalize_incomplete.csv'
+    csv_filename = 'dramaValues_1_15_70_penalize_incomplete_no_cost.csv'
+    # csv_filename = 'dramaValues_0.4_15_70.csv'
     #csv_filename = 'dramaValues_1_15_70.csv'
     #csv_filename = 'dramaValues_0.35_15_70.csv'
     currDramaData = get_column_data(csv_filename)

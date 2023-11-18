@@ -46,12 +46,12 @@ def print_story(path):
         eventInstance = EventType()
         eventInstance.doEvent(worldstate=PriorState, characters=eventCharacters, environment=eventEnvironments)
 
-def astar_search(start_state, goal_state, get_neighbors, heuristic, events, depthLimit = 15, alpha = 0.5, drama_weight = 0.4, causalityWeight = 15, deadCharacterPenalty = 150):
+def astar_search(start_state, goal_state, get_neighbors, heuristic, events, depthLimit = 15, alpha = 0.5, drama_weight = 0.4, causalityWeight = 15, deadCharacterPenalty = 150, penalizeIncomplete = False):
     open_set = []  # Priority queue for nodes to be evaluated
     closed_set = set()  # Set to keep track of visited nodes
 
     # Create the initial node
-    start_node = Node(state=start_state, cost=0, heuristic=heuristic(start_state, goal_state, drama_weight, causalityWeight, deadCharacterPenalty))
+    start_node = Node(state=start_state, cost=0, heuristic=heuristic(start_state, goal_state, drama_weight, causalityWeight, deadCharacterPenalty, penalizeIncomplete))
     RandomPopHeapQ.heappush(open_set, (start_node.total_cost(), start_node))
 
     minDistance = None
@@ -62,7 +62,7 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
         else:
             _, current_node = RandomPopHeapQ.heaprandpop(open_set)
 
-        distanceToTarget = heuristic(current_node.state, goal_state, drama_weight, causalityWeight, deadCharacterPenalty)
+        distanceToTarget = heuristic(current_node.state, goal_state, drama_weight, causalityWeight, deadCharacterPenalty, penalizeIncomplete)
         print(distanceToTarget)
         if distanceToTarget < 100:
             print(distanceToTarget)
@@ -110,8 +110,10 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
             if neighbor_state in closed_set:
                 continue
 
+            # TODO: Investigate how this cost affects length of final constructed stories.
             # Calculate the cost to reach the neighbor node
-            new_cost = current_node.cost + 5
+            #new_cost = current_node.cost + 5
+            new_cost = current_node.cost
 
             # Check if the neighbor is already in the open set
             neighbor_node = next((node for _, node in open_set if node.state == neighbor_state), None)
@@ -124,7 +126,7 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
                     state=neighbor_state,
                     parent=current_node,
                     cost=new_cost,
-                    heuristic=heuristic(neighbor_state, goal_state, drama_weight, causalityWeight, deadCharacterPenalty)
+                    heuristic=heuristic(neighbor_state, goal_state, drama_weight, causalityWeight, deadCharacterPenalty, penalizeIncomplete)
                 )
                 RandomPopHeapQ.heappush(open_set, (neighbor_node.total_cost(), neighbor_node))
 
@@ -140,18 +142,24 @@ def get_neighbors(state, possible_events, depthLimit):
 #def heuristic(state, goal_state):
 #    return distanceBetweenWorldstates(state, goal_state)
 
-def heuristic(state, goal_state, dramaWeight, causalityWeight, deadCharWeight):
-    return distanceBetweenWorldstates(state, goal_state, dramaWeight, causalityWeight, deadCharWeight)
+def heuristic(state, goal_state, dramaWeight, causalityWeight, deadCharWeight, penalizeIncomplete):
+    return distanceBetweenWorldstates(state, goal_state, dramaWeight, causalityWeight, deadCharWeight, penalizeIncomplete)
 
-def chained_astar_search(start_state, waypoints, get_neighbors, heuristic, events, depthLimit = 15, alpha = 0.5, drama_weight = 0.4, causalityWeight = 15, deadCharacterPenalty = 150):
+def chained_astar_search(start_state, waypoints, get_neighbors, heuristic, events, depthLimit = 15, alpha = 0.5, drama_weight = 0.4, causalityWeight = 15, deadCharacterPenalty = 150, penalizeIncomplete = False):
     InitialState = start_state
     TotalWorldstatesVisited = 0
     FinalPath = []
     InitialState = start_state
     firstPath = True
     for waypoint in waypoints:
-        pathChunk, ExaminedStates = astar_search(InitialState, waypoint, get_neighbors, heuristic, events, depthLimit, alpha, drama_weight, causalityWeight, deadCharacterPenalty)
-        TotalWorldstatesVisited += ExaminedStates
+        if penalizeIncomplete & (waypoint == waypoints[len(waypoints)-1]):
+                pathChunk, ExaminedStates = astar_search(InitialState, waypoint, get_neighbors, heuristic, events,
+                                                         depthLimit, alpha, drama_weight, causalityWeight,
+                                                         deadCharacterPenalty, True)
+                TotalWorldstatesVisited += ExaminedStates
+        else:
+            pathChunk, ExaminedStates = astar_search(InitialState, waypoint, get_neighbors, heuristic, events, depthLimit, alpha, drama_weight, causalityWeight, deadCharacterPenalty, False)
+            TotalWorldstatesVisited += ExaminedStates
         if firstPath:
             FinalPath = pathChunk
             firstPath = False

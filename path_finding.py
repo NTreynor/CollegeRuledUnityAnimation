@@ -75,7 +75,7 @@ def determineDramaCurveDistance(currWorldState, penalizeIncomplete = False):
         actual = dramaPath[i+1]
         totalDistance += round(abs(target-actual)) # Sum the distances between targets and actual values at each point
     #if totalDistance > 100:
-    #    print("debug!")
+        #print("debug!")
 
     # If enabled, penalize stories not reaching full length in order to push story length to match.
     if penalizeIncomplete:
@@ -90,7 +90,7 @@ def determineDramaCurveDistance(currWorldState, penalizeIncomplete = False):
 
 
 
-def distanceBetweenWorldstates(currWorldState, newWorldState, drama_weight = 0.4, causalityWeight = 15, deadCharacterPenalty = 150):
+def distanceBetweenWorldstates(currWorldState, newWorldState, drama_weight = 0.4, causalityWeight = 15, deadCharacterPenalty = 150, penalizeIncomplete = False):
     distance = 0
 
     if currWorldState.characters:
@@ -122,7 +122,7 @@ def distanceBetweenWorldstates(currWorldState, newWorldState, drama_weight = 0.4
 
     # Drama scores using drama curve methodology
     if currWorldState.getDramaCurve() != None:
-        drama_distance = determineDramaCurveDistance(currWorldState)
+        drama_distance = determineDramaCurveDistance(currWorldState, penalizeIncomplete)
         weightedDramaDistance = drama_distance * drama_weight
         distance += weightedDramaDistance
         return distance

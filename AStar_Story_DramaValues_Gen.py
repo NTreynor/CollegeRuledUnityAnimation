@@ -46,7 +46,7 @@ if __name__ == "__main__":
         initWorldState, waypoints = SciFiwaypointTestEnvironmentParam(testCurve)
         start_state = initWorldState
         storyPath, VisitedStates = chained_astar_search(start_state, waypoints, get_neighbors, heuristic,
-                                                        NoRestaurantPossibleEvents, depthLimit=15, alpha=0.5, drama_weight=0.4, causalityWeight=15, deadCharacterPenalty=150)
+                                                        NoRestaurantPossibleEvents, depthLimit=15, alpha=0.5, drama_weight=1, causalityWeight=15, deadCharacterPenalty=150, penalizeIncomplete=True)
         dramaVals = extract_drama_vals(storyPath)
         f.close()
 
@@ -55,7 +55,7 @@ if __name__ == "__main__":
             dramaVals.extend([0] * (15 - len(dramaVals)))
 
             # Specify the existing CSV file name
-            csv_filename = "dramaValues_0.4_15_70_penalize_incomplete.csv"
+            csv_filename = "dramaValues_1_15_70_penalize_incomplete_no_cost.csv"
             # Append the list to the existing CSV file
             with open(csv_filename, 'a', newline='') as csvfile:
                 csv_writer = csv.writer(csvfile)
