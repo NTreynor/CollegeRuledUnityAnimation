@@ -79,11 +79,16 @@ if __name__ == "__main__":
 
     # Target line data
     # Drama curve Initialization
+    #params = [[2.6, 6], [2, 13]]
+    #testCurve = DramaCurve(2, params, 16, 100)
+
     params = [[5.5, 8], [2.5, 13]]
     testCurve = DramaCurve(2, params, 16, 70)
     targets = testCurve.getDramaTargets()
 
-    csv_filename = 'dramaValues_1.5_15_70.csv'
+    csv_filename = 'dramaValues_0.4_15_70.csv'
+    #csv_filename = 'dramaValues_1_15_70.csv'
+    #csv_filename = 'dramaValues_0.35_15_70.csv'
     currDramaData = get_column_data(csv_filename)
     currDramaData = replaceZeroes(currDramaData)
     dramaBoxPlotData = analyze_each_column(csv_filename, False)
