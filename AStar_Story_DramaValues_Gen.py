@@ -25,7 +25,7 @@ def extract_drama_vals(path):
 
 if __name__ == "__main__":
 
-    NoRestaurantPossibleEvents = [CoffeeSpill(), DoNothing(), ThrowDrink(), Befriend(), HitOnAccepted(),
+    NoRestaurantPossibleEvents = [CoffeeSpill(), ThrowDrink(), Befriend(), HitOnAccepted(),
                                   HitOnRejected(), BefriendModerate(), BefriendSlight(), BefriendStrong(),
                                   IrritateStrong(), IrritateMild(), IrritateIncreasing(), BreakingPoint(),
                                   BreakingPointDuel(), MildIntentionalAnnoyance(), ModerateIntentionalAnnoyance(),
@@ -36,17 +36,19 @@ if __name__ == "__main__":
                                   AssistedJailBreak(), SabotagedJailBreak(), DoNothing(), GetRejectedFromJob()]
 
 
-    numStories = 30
+    numStories = 250
     dramaValList = []
     for z in range(numStories):
         f = open("testStory.txt", "w")
         # Drama curve Initialization
         params = [[5.5, 8], [2.5, 13]]
         testCurve = DramaCurve(2, params, 16, 70)
-        initWorldState, waypoints = SciFiwaypointTestEnvironmentParam(testCurve)
+        #initWorldState, waypoints = SciFiwaypointTestEnvironmentParam(testCurve)
+        #start_state = initWorldState
+        initWorldState, waypoints = RandomWalkEnvironment()
         start_state = initWorldState
         storyPath, VisitedStates = chained_astar_search(start_state, waypoints, get_neighbors, heuristic,
-                                                        NoRestaurantPossibleEvents, depthLimit=15, alpha=0.5, drama_weight=1, causalityWeight=15, deadCharacterPenalty=150, penalizeIncomplete=True)
+                                                        NoRestaurantPossibleEvents, depthLimit=15, alpha=1, drama_weight=0, causalityWeight=0, deadCharacterPenalty=150, penalizeIncomplete=True)
         dramaVals = extract_drama_vals(storyPath)
         f.close()
 
@@ -54,9 +56,10 @@ if __name__ == "__main__":
         if len(dramaVals) < 15:
             dramaVals.extend([0] * (15 - len(dramaVals)))
 
-            # Specify the existing CSV file name
-            csv_filename = "dramaValues_1_15_70_penalize_incomplete_no_cost.csv"
-            # Append the list to the existing CSV file
-            with open(csv_filename, 'a', newline='') as csvfile:
-                csv_writer = csv.writer(csvfile)
-                csv_writer.writerow(dramaVals)
+        # Specify the existing CSV file name
+        #csv_filename = "dramaValues_1_15_70_penalize_incomplete_no_cost.csv"
+        csv_filename = "randomDramaWalk.csv"
+        # Append the list to the existing CSV file
+        with open(csv_filename, 'a', newline='') as csvfile:
+            csv_writer = csv.writer(csvfile)
+            csv_writer.writerow(dramaVals)

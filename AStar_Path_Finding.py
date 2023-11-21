@@ -58,7 +58,8 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
 
     while open_set:
         if random.random() < alpha:
-            _, current_node = RandomPopHeapQ.heappop(open_set)
+            #_, current_node = RandomPopHeapQ.heappop(open_set)
+            _, current_node = RandomPopHeapQ.pop_random_min_entry(open_set)
         else:
             _, current_node = RandomPopHeapQ.heaprandpop(open_set)
 
@@ -66,7 +67,7 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
         print(distanceToTarget)
         if distanceToTarget < 100:
             print(distanceToTarget)
-        if distanceToTarget < 0:
+        if distanceToTarget < -14:
             # Found the goal, reconstruct the path
             path = []
             while current_node:

@@ -125,6 +125,10 @@ def distanceBetweenWorldstates(currWorldState, newWorldState, drama_weight = 0.4
         drama_distance = determineDramaCurveDistance(currWorldState, penalizeIncomplete)
         weightedDramaDistance = drama_distance * drama_weight
         distance += weightedDramaDistance
+
+        if drama_weight == 0:
+            # Then this is for testing purposes. We want a max-length story.
+            distance -= len(currWorldState.event_history)
         return distance
 
     # Drama scoring using arbitrary assigned target for a waypoint
