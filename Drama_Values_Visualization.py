@@ -79,18 +79,22 @@ if __name__ == "__main__":
 
     # Target line data
     # Drama curve Initialization
-    #params = [[2.6, 6], [2, 13]]
-    #testCurve = DramaCurve(2, params, 16, 100)
-
-    params = [[5.5, 8], [2.5, 13]]
+    params = [[2.6, 6], [2, 13]]
     testCurve = DramaCurve(2, params, 16, 70)
+
+    #params = [[5.5, 8], [2.5, 13]]
+    #testCurve = DramaCurve(2, params, 16, 70)
     targets = testCurve.getDramaTargets()
 
     #csv_filename = 'dramaValues_0.4_15_70_penalize_incomplete.csv'
-    csv_filename = 'dramaValues_1_15_70_penalize_incomplete_no_cost.csv'
-    # csv_filename = 'dramaValues_0.4_15_70.csv'
+    #csv_filename = 'dramaValues_1_15_70_penalize_incomplete_no_cost.csv'
+    #csv_filename = 'dramaValues_0.4_15_70.csv'
     #csv_filename = 'dramaValues_1_15_70.csv'
     #csv_filename = 'dramaValues_0.35_15_70.csv'
+    #csv_filename = 'randomDramaWalk.csv'
+    csv_filename = 'dramaValues_2_15_70_penalize_incomplete_no_cost_0.6.csv'
+
+
     currDramaData = get_column_data(csv_filename)
     currDramaData = replaceZeroes(currDramaData)
     dramaBoxPlotData = analyze_each_column(csv_filename, False)
@@ -125,7 +129,12 @@ if __name__ == "__main__":
     legend_elements = [Line2D([0], [0], color='red', lw=4, label='Target Drama Values'),
                        Patch(facecolor=sns.desaturate('blue', .5), edgecolor='grey', linewidth=1.5,
                              label='Produced Drama Values')]
+    #legend_elements = [Patch(facecolor=sns.desaturate('blue', .5), edgecolor='grey', linewidth=1.5,
+                             #label='Produced Drama Values')]
     ax.legend(handles=legend_elements, fontsize='xx-large')
+    # Set x-axis limits
+    ax.set_ylim(-35, 125)
+    ax.set_xlim(-0.5, 15.5)# Adjust the upper limit as needed
 
     # show plot
     plt.show()

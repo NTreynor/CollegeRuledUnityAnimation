@@ -67,7 +67,7 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
         print(distanceToTarget)
         if distanceToTarget < 100:
             print(distanceToTarget)
-        if distanceToTarget < -14:
+        if distanceToTarget < goal_state.radius:
             # Found the goal, reconstruct the path
             path = []
             while current_node:
@@ -87,17 +87,18 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
 
         if not minDistance:
             minDistance = distanceToTarget
-        if distanceToTarget < minDistance: # If we haven't found the desired path, but we are better than the current best route, store it in bestPath.
-            minDistance = distanceToTarget
             bestPath = []
+        if distanceToTarget <= minDistance: # If we haven't found the desired path, but we are better than the current best route, store it in bestPath.
+            bestPath = []
+            minDistance = distanceToTarget
             tempNode = current_node
             while tempNode:
                 bestPath.append(tempNode.state)
                 tempNode = tempNode.parent
                 bestPath = list(bestPath)
                 bestPath.sort(key=lambda x: len(x.event_history), reverse=False)
-                if len(bestPath) > 5:
-                    print("debug")
+                #if len(bestPath) > 5:
+                #    print("debug")
                 #print("Best path stored.")
                 #print(bestPath)
         ExaminedWorldstates = len(open_set) + len(closed_set)
@@ -134,7 +135,10 @@ def astar_search(start_state, goal_state, get_neighbors, heuristic, events, dept
     # If no path is found, return an empty list
     print("No path found! Returning closest path.")
     ExaminedWorldstates = len(open_set) + len(closed_set)
-    return [bestPath, ExaminedWorldstates]
+    if bestPath:
+        return [bestPath, ExaminedWorldstates]
+    else:
+        return [[], ExaminedWorldstates]
 
 def get_neighbors(state, possible_events, depthLimit):
     state.getRunableEvents(possible_events)

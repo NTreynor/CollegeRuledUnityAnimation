@@ -379,6 +379,7 @@ def SciFiwaypointTestEnvironmentParam(curve):
 
     wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 10, testCurve)
     wp_2_worldstate = copy.deepcopy(wp_curr_worldstate) # Save second waypoint
+    wp_2_worldstate.radius = 35
     wp_2_worldstate.drama_score = 15
 
     #wp_jess = Character("Jess", health=None, happiness=None, location=wp_serenity, romantic_partner=None)
@@ -398,7 +399,7 @@ def SciFiwaypointTestEnvironmentParam(curve):
 
     wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 40, testCurve)
     wp_3_worldstate = copy.deepcopy(wp_curr_worldstate) # Save third waypoint
-    wp_3_worldstate.drama_score = 75
+    wp_3_worldstate.radius = 0
 
     waypoints = [wp_2_worldstate, wp_3_worldstate]
     starting_point = wp_init_worldstate

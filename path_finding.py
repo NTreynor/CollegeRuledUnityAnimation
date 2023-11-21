@@ -82,7 +82,7 @@ def determineDramaCurveDistance(currWorldState, penalizeIncomplete = False):
         currStoryLen = len(dramaPath)
         targetStoryLen = len(dramaTargets)
         targetsToGrab = targetStoryLen - currStoryLen
-        dramaPenalty = sum(dramaTargets[-targetsToGrab:])
+        dramaPenalty = sum(dramaTargets[-targetsToGrab:])*.6
         totalDistance += dramaPenalty
 
     return totalDistance
