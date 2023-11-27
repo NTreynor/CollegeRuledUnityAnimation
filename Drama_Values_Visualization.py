@@ -92,7 +92,7 @@ if __name__ == "__main__":
     #csv_filename = 'dramaValues_1_15_70.csv'
     #csv_filename = 'dramaValues_0.35_15_70.csv'
     #csv_filename = 'randomDramaWalk.csv'
-    csv_filename = 'dramaValues_2_15_70_penalize_incomplete_no_cost_0.6.csv'
+    csv_filename = 'Saved Drama Data/dramaValues_2_15_70_penalize_incomplete_no_cost_0.6.csv'
 
 
     currDramaData = get_column_data(csv_filename)

@@ -63,7 +63,7 @@ if __name__ == "__main__":
         # Specify the existing CSV file name
         #csv_filename = "dramaValues_1_15_70_penalize_incomplete_no_cost.csv"
         #csv_filename = "dramaValues_2_15_70_penalize_incomplete_no_cost_0.6_highalpha.csv"
-        csv_filename = "dramaValues_1_15_90_Final"
+        csv_filename = "Saved Drama Data/dramaValues_1_15_90_Final"
         # Append the list to the existing CSV file
         with open(csv_filename, 'a', newline='') as csvfile:
             csv_writer = csv.writer(csvfile)

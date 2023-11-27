@@ -30,7 +30,7 @@ def display_dot_plot_from_csv(csv_filename):
     plt.show()
 
 # Specify the CSV file containing lines of 15 integers
-csv_filename = 'dramaValues.csv'
+csv_filename = 'Saved Drama Data/dramaValues.csv'
 
 # Call the function to display the dot plot
 display_dot_plot_from_csv(csv_filename)
@@ -75,7 +75,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Specify the CSV file containing X and Y values
-csv_filename = 'alpha+visitedStatesCorrectedSimple.csv'
+csv_filename = 'Saved Drama Data/alpha+visitedStatesCorrectedSimple.csv'
 # Load data from CSV into a DataFrame
 data = pd.read_csv(csv_filename, header=None, names=['P Value', 'Explored Worldstates'])
 
