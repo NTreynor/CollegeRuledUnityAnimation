@@ -51,7 +51,7 @@ def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_event
 
         return random.choice(equallyValubleIndexes), currEventMinDistance
 
-def determineDramaCurveDistance(currWorldState):
+def determineDramaCurveDistance(currWorldState, penalizeIncomplete = False):
     distance = 0
     #TODO: Implement function that takes in a worldstate, looks back along the curve and drama values, and sums the
     # distance from each individual worldstate in the history to the target value at that index.
@@ -71,21 +71,27 @@ def determineDramaCurveDistance(currWorldState):
     totalDistance = 0
     #print(dramaPath)
     for i in range(steps):
-        target = currWorldState.drama_curve.drama_targets[i]
+        target = dramaTargets[i]
         actual = dramaPath[i+1]
         totalDistance += round(abs(target-actual)) # Sum the distances between targets and actual values at each point
     #if totalDistance > 100:
-    #    print("debug!")
+        #print("debug!")
+
+    # If enabled, penalize stories not reaching full length in order to push story length to match.
+    if penalizeIncomplete:
+        currStoryLen = len(dramaPath)
+        targetStoryLen = len(dramaTargets)
+        targetsToGrab = targetStoryLen - currStoryLen
+        dramaPenalty = sum(dramaTargets[-targetsToGrab:])*.6
+        totalDistance += dramaPenalty
+
     return totalDistance
 
 
 
 
-def distanceBetweenWorldstates(currWorldState, newWorldState):
+def distanceBetweenWorldstates(currWorldState, newWorldState, drama_weight = 0.4, causalityWeight = 15, deadCharacterPenalty = 150, penalizeIncomplete = False):
     distance = 0
-    drama_weight = 0.3
-    causalityWeight = 20
-    deadCharacterPenalty = 150
 
     if currWorldState.characters:
         for character in currWorldState.characters:
@@ -116,9 +122,13 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
 
     # Drama scores using drama curve methodology
     if currWorldState.getDramaCurve() != None:
-        drama_distance = determineDramaCurveDistance(currWorldState)
+        drama_distance = determineDramaCurveDistance(currWorldState, penalizeIncomplete)
         weightedDramaDistance = drama_distance * drama_weight
         distance += weightedDramaDistance
+
+        if drama_weight == 0:
+            # Then this is for testing purposes. We want a max-length story.
+            distance -= len(currWorldState.event_history)
         return distance
 
     # Drama scoring using arbitrary assigned target for a waypoint

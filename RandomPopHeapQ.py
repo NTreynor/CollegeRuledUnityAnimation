@@ -191,6 +191,35 @@ def heapify(x):
     for i in reversed(range(n//2)):
         _siftup(x, i)
 
+def get_entries_with_min_value(heap):
+    if not heap:
+        return []
+
+    min_value = heap[0]  # Assuming it's a min-heap
+    min_entries = []
+
+    for entry in heap:
+        if entry == min_value:
+            min_entries.append(entry)
+
+    return min_entries
+
+def pop_random_min_entry(heap):
+    if not heap:
+        return None
+
+    min_value = heap[0][0]  # Assuming it's a min-heap
+    min_entries = [entry for entry in heap if entry[0] == min_value]
+
+    if not min_entries:
+        return None
+
+    popped_entry = random.choice(min_entries)
+    heap.remove(popped_entry)
+    heapify(heap)
+
+    return popped_entry
+
 def _heappop_max(heap):
     """Maxheap version of a heappop."""
     lastelt = heap.pop()    # raises appropriate IndexError if heap is empty

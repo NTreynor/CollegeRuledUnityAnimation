@@ -335,13 +335,150 @@ def SciFiwaypointTestEnvironment():
 
     return [starting_point, waypoints]
 
+def SciFiwaypointTestEnvironmentParam(curve):
+    # Environment Initialization
+
+    testCurve = curve
+
+    wp_serenity = Environment("Serenity", 25)
+    wp_space = Environment("Space", -100)
+    wp_serenity.setDistance(wp_space, 0)
+    wp_space.setDistance(wp_serenity, 0)
+
+    # Character & Relationship Initialization
+    wp_jess = Character("Jess", health=7, happiness=8, location=wp_serenity, romantic_partner=False)
+    wp_mal = Character("Mal", health=7, happiness=7, location=wp_serenity, romantic_partner=False)
+    wp_inara = Character("Inara", health=7, happiness=5, location=wp_serenity, romantic_partner=False, murderer=False)
+
+    wp_jess.updateRelationship(wp_mal, 45)
+    wp_jess.updateRelationship(wp_inara, 0)
+    wp_mal.updateRelationship(wp_jess, 45)
+    wp_mal.updateRelationship(wp_inara, 35)
+    wp_inara.updateRelationship(wp_jess, -5)
+    wp_inara.updateRelationship(wp_mal, 35)
+
+    wp_environments = [wp_serenity, wp_space]
+    wp_chars = [wp_jess, wp_mal, wp_inara]
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, None, testCurve)
+
+    wp_init_worldstate = copy.deepcopy(wp_curr_worldstate) # Save FIRST worldstate
+
+    # Update characters for second waypoint
+
+    wp_jess.health = None
+    wp_mal.health = None
+    wp_inara.health = None
+    wp_jess.happiness = None
+    wp_mal.happiness = None
+    wp_inara.happiness = None
+    wp_jess.updateRelationship(wp_mal, 30)
+    wp_mal.updateRelationship(wp_jess, 40)
+    wp_jess.romantic_partner = wp_mal
+    wp_mal.romantic_partner = wp_jess
+    wp_chars = [wp_jess, wp_mal, wp_inara]
+
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 10, testCurve)
+    wp_2_worldstate = copy.deepcopy(wp_curr_worldstate) # Save second waypoint
+    wp_2_worldstate.radius = 35
+    wp_2_worldstate.drama_score = 15
+
+    #wp_jess = Character("Jess", health=None, happiness=None, location=wp_serenity, romantic_partner=None)
+    wp_mal.relationships.pop(wp_jess)
+    wp_jess.updateRelationship(wp_mal, -120)
+    wp_inara.relationships.pop(wp_jess)
+    wp_jess.relationships.pop(wp_inara)
+    wp_mal.updateRelationship(wp_inara, 40)
+    wp_inara.updateRelationship(wp_mal, 55)
+    wp_mal.romantic_partner = wp_inara
+    wp_inara.romantic_partner = wp_mal
+    wp_jess.romantic_partner = None
+    wp_jess.murderer = None
+    wp_jess.fugitive = True
+    #wp_mal.has_job = True
+    wp_chars = [wp_mal, wp_inara, wp_jess]
+
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 40, testCurve)
+    wp_3_worldstate = copy.deepcopy(wp_curr_worldstate) # Save third waypoint
+    wp_3_worldstate.radius = 0
+
+    waypoints = [wp_2_worldstate, wp_3_worldstate]
+    starting_point = wp_init_worldstate
+
+    return [starting_point, waypoints]
+
+def SciFiwaypointTestEnvironmentSimple():
+    # Environment Initialization
+
+    # Drama curve Initialization
+    params = [[5.5, 8], [2.5, 13]]
+    testCurve = DramaCurve(2, params, 16, 70)
+
+    wp_serenity = Environment("Serenity", 25)
+    wp_space = Environment("Space", -100)
+    wp_serenity.setDistance(wp_space, 0)
+    wp_space.setDistance(wp_serenity, 0)
+
+    # Character & Relationship Initialization
+    wp_jess = Character("Jess", health=7, happiness=8, location=wp_serenity, romantic_partner=False)
+    wp_mal = Character("Mal", health=7, happiness=7, location=wp_serenity, romantic_partner=False)
+    wp_inara = Character("Inara", health=7, happiness=5, location=wp_serenity, romantic_partner=False, murderer=False)
+
+    wp_jess.updateRelationship(wp_mal, 45)
+    wp_jess.updateRelationship(wp_inara, 0)
+    wp_mal.updateRelationship(wp_jess, 45)
+    wp_mal.updateRelationship(wp_inara, 35)
+    wp_inara.updateRelationship(wp_jess, -5)
+    wp_inara.updateRelationship(wp_mal, 35)
+
+    wp_environments = [wp_serenity, wp_space]
+    wp_chars = [wp_jess, wp_mal, wp_inara]
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, None, testCurve)
+
+    wp_init_worldstate = copy.deepcopy(wp_curr_worldstate) # Save FIRST worldstate
+
+    # Update characters for second waypoint
+
+    wp_jess.health = None
+    wp_mal.health = None
+    wp_inara.health = None
+    wp_jess.happiness = None
+    wp_mal.happiness = None
+    wp_inara.happiness = None
+    wp_jess.updateRelationship(wp_mal, 30)
+    wp_mal.updateRelationship(wp_jess, 40)
+    wp_jess.romantic_partner = wp_mal
+    wp_mal.romantic_partner = wp_jess
+    wp_chars = [wp_jess, wp_mal, wp_inara]
+
+    wp_mal.relationships.pop(wp_jess)
+    wp_jess.updateRelationship(wp_mal, -120)
+    wp_inara.relationships.pop(wp_jess)
+    wp_jess.relationships.pop(wp_inara)
+    wp_mal.updateRelationship(wp_inara, 40)
+    wp_inara.updateRelationship(wp_mal, 55)
+    wp_mal.romantic_partner = wp_inara
+    wp_inara.romantic_partner = wp_mal
+    wp_jess.romantic_partner = None
+    wp_jess.murderer = None
+    wp_jess.fugitive = True
+    #wp_mal.has_job = True
+    wp_chars = [wp_mal, wp_inara, wp_jess]
+
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 40, testCurve)
+    wp_3_worldstate = copy.deepcopy(wp_curr_worldstate) # Save third waypoint
+    wp_3_worldstate.drama_score = 75
+
+    waypoints = [wp_3_worldstate]
+    starting_point = wp_init_worldstate
+
+    return [starting_point, waypoints]
+
 
 def SciFiwaypointTestEnvironmentAlt():
 
     # Drama curve Initialization
     params = [[2.6, 6], [2, 13]]
     testCurve = DramaCurve(2, params, 16, 100)
-
 
     # Environment Initialization
     wp_serenity = Environment("Serenity", 25)
@@ -383,6 +520,53 @@ def SciFiwaypointTestEnvironmentAlt():
 
     return [starting_point, waypoints]
 
+def RandomWalkEnvironment():
+    # Environment Initialization
+
+    # Drama curve Initialization
+    params = [[5.5, 8], [2.5, 13]]
+    testCurve = DramaCurve(2, params, 16, 70)
+
+    wp_serenity = Environment("Serenity", 25)
+    wp_space = Environment("Space", -100)
+    wp_serenity.setDistance(wp_space, 0)
+    wp_space.setDistance(wp_serenity, 0)
+
+    # Character & Relationship Initialization
+    wp_jess = Character("Jess", health=7, happiness=8, location=wp_serenity, romantic_partner=False)
+    wp_mal = Character("Mal", health=7, happiness=7, location=wp_serenity, romantic_partner=False)
+    wp_inara = Character("Inara", health=7, happiness=5, location=wp_serenity, romantic_partner=False, murderer=False)
+
+    wp_jess.updateRelationship(wp_mal, 45)
+    wp_jess.updateRelationship(wp_inara, 0)
+    wp_mal.updateRelationship(wp_jess, 45)
+    wp_mal.updateRelationship(wp_inara, 35)
+    wp_inara.updateRelationship(wp_jess, -5)
+    wp_inara.updateRelationship(wp_mal, 35)
+
+    wp_environments = [wp_serenity, wp_space]
+    wp_chars = [wp_jess, wp_mal, wp_inara]
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, None, testCurve)
+
+    wp_init_worldstate = copy.deepcopy(wp_curr_worldstate) # Save FIRST worldstate
+
+
+    wp_jess2 = Character("Jess", health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None,
+                         in_jail=None, stole=None, has_job=None, exploited=None)
+    wp_mal2 = Character("Mal", health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None,
+                        in_jail=None, stole=None, has_job=None, exploited=None)
+    wp_inara2 = Character("Mal", health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None,
+                        in_jail=None, stole=None, has_job=None, exploited=None)
+
+    wp_chars2 = [wp_jess2, wp_mal2, wp_inara2]
+
+    wp_curr_worldstate2 = WorldState(0, wp_chars2, wp_environments, 10, testCurve)
+    wp_2_worldstate = copy.deepcopy(wp_curr_worldstate2)  # Save second waypoint
+
+    waypoints = [wp_2_worldstate]
+    starting_point = wp_init_worldstate
+    return [starting_point, waypoints]
+
 if __name__ == "__main__":
 
     #possibleEvents = [GetMiningJob(), GetSpaceShuttleJob(), CoffeeSpill(), LoseJob(), DoNothing(), MoneyProblems(),
@@ -403,7 +587,7 @@ if __name__ == "__main__":
         #initWorldState, waypoints = waypointTestEnvironmentDramatic()
         #initWorldState, waypoints = waypointTestEnvironment()
         initWorldState, waypoints = SciFiwaypointTestEnvironmentAlt()
-        dramaValuesInstance = runStory(initWorldState, NoRestaurantPossibleEvents, 15, waypoints, lookaheadDepth=2)
+        dramaValuesInstance = runStory(initWorldState, NoRestaurantPossibleEvents, 15, waypoints, lookaheadDepth=1)
         dramaValList.append(dramaValuesInstance)
         f.close()
 
