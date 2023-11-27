@@ -81,7 +81,7 @@ class GoToSpaceJail(PlotFragment):
             if (character.stole or character.exploited or character.murderer or character.fugitive) and not character.in_jail:
                 characters = [character]
                 environment = []
-                if self.withinRecentHistoryLimit(worldstate, characters, environment, 3):
+                if self.withinRecentHistoryLimit(worldstate, characters, environment, 5):
                     valid_characters.append([character])
                     environments.append([])
         if valid_characters:

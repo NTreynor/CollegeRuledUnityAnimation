@@ -13,8 +13,10 @@ class MoneyProblems(PlotFragment):
             return False, None, environments
         for character in worldstate.characters:
             if not (character.has_job):
-                valid_characters.append([character])
-                environments.append([])
+                if self.withinRecentHistoryLimit(worldstate, [character], [], 3):
+                    if self.withinInstanceLimit(worldstate, [character], [], 2):
+                        valid_characters.append([character])
+                        environments.append([])
         if valid_characters:
             return True, valid_characters, environments
         else:
@@ -44,8 +46,10 @@ class GetMiningJob(PlotFragment):
             return False, None, environments
         for character in worldstate.characters:
             if not (character.has_job or character.fugitive):
-                valid_characters.append([character])
-                environments.append([])
+                if self.withinRecentHistoryLimit(worldstate, [character], [], 3):
+                    if self.withinInstanceLimit(worldstate, [character], [], 2):
+                        valid_characters.append([character])
+                        environments.append([])
         if valid_characters:
             return True, valid_characters, environments
         else:
@@ -76,8 +80,10 @@ class GetRejectedFromJob(PlotFragment):
             return False, None, environments
         for character in worldstate.characters:
             if not (character.has_job or character.fugitive):
-                valid_characters.append([character])
-                environments.append([])
+                if self.withinRecentHistoryLimit(worldstate, [character], [], 3):
+                    if self.withinInstanceLimit(worldstate, [character], [], 2):
+                        valid_characters.append([character])
+                        environments.append([])
         if valid_characters:
             return True, valid_characters, environments
         else:
@@ -108,8 +114,10 @@ class GetSpaceShuttleJob(PlotFragment):
             return False, None, environments
         for character in worldstate.characters:
             if not character.has_job:
-                valid_characters.append([character])
-                environments.append([])
+                if self.withinRecentHistoryLimit(worldstate, [character], [], 3):
+                    if self.withinInstanceLimit(worldstate, [character], [], 1):
+                        valid_characters.append([character])
+                        environments.append([])
         if valid_characters:
             return True, valid_characters, environments
         else:
@@ -139,8 +147,10 @@ class LoseJob(PlotFragment):
             return False, None, environments
         for character in worldstate.characters:
             if character.has_job:
-                valid_characters.append([character])
-                environments.append([])
+                if self.withinRecentHistoryLimit(worldstate, [character], [], 3):
+                    if self.withinInstanceLimit(worldstate, [character], [], 2):
+                        valid_characters.append([character])
+                        environments.append([])
         if valid_characters:
             return True, valid_characters, environments
         else:

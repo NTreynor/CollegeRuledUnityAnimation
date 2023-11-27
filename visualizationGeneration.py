@@ -70,11 +70,29 @@ def showcase_means_from_csv(csv_filename):
     plt.grid()
     plt.show()
 
+import seaborn as sns
+import pandas as pd
+import matplotlib.pyplot as plt
+
 # Specify the CSV file containing X and Y values
 csv_filename = 'alpha+visitedStatesCorrectedSimple.csv'
+# Load data from CSV into a DataFrame
+data = pd.read_csv(csv_filename, header=None, names=['P Value', 'Explored Worldstates'])
 
-# Call the function to showcase the means
-showcase_means_from_csv(csv_filename)
+# Create a scatter plot using Seaborn
+sns.scatterplot(x='P Value', y='Explored Worldstates', data=data)
+
+# Set labels for axes
+plt.xlabel("$P$ Value")
+plt.ylabel('Explored Worldstates')
+fig = plt.figure(figsize=(12, 10))
+ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
+ax.set_ylim(-1000, 12000)
+ax.set_xlim(-0.1, 1.1)
+
+# Show the plot
+plt.show()
+
 
 
 

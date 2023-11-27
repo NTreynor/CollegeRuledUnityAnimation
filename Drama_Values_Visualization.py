@@ -145,5 +145,6 @@ if __name__ == "__main__":
     plt.plot(xVals, medianValues, color="red") #current
     plt.plot(xVals, maxValues, color="blue") #upper bound
     plt.plot(xVals, minValues, color="blue") #Lower bound
+
     plt.show()
     #plt.plot(xVals, targets, color="green") #Target

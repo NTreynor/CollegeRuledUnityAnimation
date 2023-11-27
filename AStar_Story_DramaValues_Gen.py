@@ -36,7 +36,7 @@ if __name__ == "__main__":
                                   AssistedJailBreak(), SabotagedJailBreak(), DoNothing(), GetRejectedFromJob()]
 
 
-    numStories = 250
+    numStories = 30
     dramaValList = []
     for z in range(numStories):
         f = open("testStory.txt", "w")
@@ -46,13 +46,13 @@ if __name__ == "__main__":
 
         # Drama curve Initialization
         params = [[2.6, 6], [2, 13]]
-        testCurve = DramaCurve(2, params, 16, 70)
+        testCurve = DramaCurve(2, params, 16, 90)
         initWorldState, waypoints = SciFiwaypointTestEnvironmentParam(testCurve)
         start_state = initWorldState
         #initWorldState, waypoints = RandomWalkEnvironment()
         #start_state = initWorldState
         storyPath, VisitedStates = chained_astar_search(start_state, waypoints, get_neighbors, heuristic,
-                                                        NoRestaurantPossibleEvents, depthLimit=15, alpha=.9, drama_weight=2, causalityWeight=15, deadCharacterPenalty=150, penalizeIncomplete=True)
+                                                        NoRestaurantPossibleEvents, depthLimit=15, alpha=.2, drama_weight=1, causalityWeight=15, deadCharacterPenalty=150, penalizeIncomplete=False)
         dramaVals = extract_drama_vals(storyPath)
         f.close()
 
@@ -62,7 +62,8 @@ if __name__ == "__main__":
 
         # Specify the existing CSV file name
         #csv_filename = "dramaValues_1_15_70_penalize_incomplete_no_cost.csv"
-        csv_filename = "dramaValues_2_15_70_penalize_incomplete_no_cost_0.6_highalpha.csv"
+        #csv_filename = "dramaValues_2_15_70_penalize_incomplete_no_cost_0.6_highalpha.csv"
+        csv_filename = "dramaValues_1_15_90_Final"
         # Append the list to the existing CSV file
         with open(csv_filename, 'a', newline='') as csvfile:
             csv_writer = csv.writer(csvfile)
